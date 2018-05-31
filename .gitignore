@@ -81,6 +81,10 @@ DerivedDataCache/*
 Plugins/*/Intermediate/*
 Plugins/*/Binaries/*
 
+# Ignore Starter Content
+Content/StarterContent
+Content/StarterContent/*
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
