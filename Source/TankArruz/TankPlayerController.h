@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Public/Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
@@ -14,6 +15,8 @@ class TANKARRUZ_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	ATank * GetControlledTank() const;
 	
 	
 	
