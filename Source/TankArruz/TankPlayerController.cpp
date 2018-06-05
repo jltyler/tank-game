@@ -20,7 +20,7 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTankGame, Error, TEXT("%s(%d).ControlledTank is NULL!"), *GetName(), GetUniqueID())
 
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::AimTowardsCrosshair, 1.f, true);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::GetAimPointV, 1.f, true);
 
 }
 
@@ -36,17 +36,38 @@ ATank * ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	FHitResult TraceHitResult;
-	GetCameraTraceLocation(TraceHitResult);
+	
 }
 
-bool ATankPlayerController::GetCameraTraceLocation(FHitResult & out_HitResult)
+void ATankPlayerController::GetAimPointV()
 {
-	FVector StartLocation;
-	FRotator Rotation;
-	GetPlayerViewPoint(StartLocation, Rotation);
-	FVector EndLocation(StartLocation + Rotation.Vector() * 10000);
-	bool Hit = GetWorld()->LineTraceSingleByChannel(out_HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_WorldStatic);
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor(0, 0, 255), true, .5f, 0, 10.f);
+	GetAimPoint();
+}
+
+bool ATankPlayerController::GetAimPoint()
+{
+	int32 vx, vy;
+	GetViewportSize(vx, vy);
+	FVector PLocation, PDirection;
+	if (DeprojectScreenPositionToWorld(.5 * vx, .5 * vy, PLocation, PDirection))
+	{
+		DrawDebugLine(GetWorld(), PLocation, PLocation + PDirection * AimTraceLength, FColor::Emerald, true, 1.0f, 0, 30.0f);
+		return AimTrace(PLocation, PDirection, AimTraceLength);
+	}
+	return false;
+}
+
+bool ATankPlayerController::AimTrace(const FVector & StartLocation, const FVector & Direction, const float length)
+{
+	FHitResult HitResult;
+	FVector EndLocation = StartLocation + Direction * length;
+	bool Hit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_WorldStatic);
+	if (Hit)
+	{
+		AimTracePoint = HitResult.Location;
+		UE_LOG(LogTankGame, Log, TEXT("Successful AimTrace -> %s"), *HitResult.Location.ToString())
+	}
+	else
+		AimTracePoint = StartLocation;
 	return Hit;
 }
