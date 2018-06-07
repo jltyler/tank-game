@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Public/Tank.h"
+
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
@@ -19,7 +21,6 @@ public:
 
 protected:
 	bool SetupTank();
-
 	bool SetupPlayerTank();
 
 public:

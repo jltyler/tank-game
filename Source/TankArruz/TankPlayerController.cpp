@@ -51,7 +51,7 @@ bool ATankPlayerController::FindAimPoint()
 	FVector PLocation, PDirection;
 	if (DeprojectScreenPositionToWorld(.5 * vx, .5 * vy, PLocation, PDirection))
 	{
-		DrawDebugLine(GetWorld(), PLocation, PLocation + PDirection * AimTraceLength, FColor::Emerald, true, 1.0f, 0, 30.0f);
+		//DrawDebugLine(GetWorld(), PLocation, PLocation + PDirection * AimTraceLength, FColor::Emerald, true, 1.0f, 0, 30.0f);
 		return AimTrace(PLocation, PDirection, AimTraceLength);
 	}
 	return false;

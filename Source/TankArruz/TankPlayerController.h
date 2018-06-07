@@ -27,5 +27,6 @@ protected:
 	bool FindAimPoint();
 	bool AimTrace(const FVector & Location, const FVector & Direction, const float length);
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AimTraceLength = 5000.0f;
+		float AimTraceLength = 20000.0f;
+
 };

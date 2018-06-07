@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Public/AimingComponent.h"
 #include "Tank.generated.h"
 
 UCLASS()
@@ -28,7 +29,26 @@ public:
 
 	// Set point at which the Tank will attempt to fire at
 	void SetAimPoint(const FVector & Position);
+	UFUNCTION(BlueprintCallable)
+	FVector GetAimPoint() const { return AimingComponent->GetAimPoint(); }
 	FVector GetLocation();
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetBarrelComponent(UStaticMeshComponent * NewBarrel) { AimingComponent->BarrelComponent = NewBarrel; }
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	UStaticMeshComponent * GetBarrelComponent() { return AimingComponent->BarrelComponent; }
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretComponent(UStaticMeshComponent * NewTurret) { AimingComponent->TurretComponent = NewTurret; }
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	UStaticMeshComponent * GetTurretComponent() { return AimingComponent->TurretComponent; }
+
 protected:
 	FVector AimPoint;
+	UAimingComponent * AimingComponent = nullptr;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
+	float LaunchSpeed = 1000.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float AimYawSpeed = 30.0f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float AimPitchSpeed = 30.0f;
 };
