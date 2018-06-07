@@ -20,7 +20,7 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTankGame, Error, TEXT("%s(%d).ControlledTank is NULL!"), *GetName(), GetUniqueID())
 
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::GetAimPointV, 1.f, true);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::FindAimPointV, 1.f, true);
 
 }
 
@@ -39,12 +39,12 @@ void ATankPlayerController::AimTowardsCrosshair()
 	
 }
 
-void ATankPlayerController::GetAimPointV()
+void ATankPlayerController::FindAimPointV()
 {
-	GetAimPoint();
+	FindAimPoint();
 }
 
-bool ATankPlayerController::GetAimPoint()
+bool ATankPlayerController::FindAimPoint()
 {
 	int32 vx, vy;
 	GetViewportSize(vx, vy);
@@ -64,10 +64,9 @@ bool ATankPlayerController::AimTrace(const FVector & StartLocation, const FVecto
 	bool Hit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_WorldStatic);
 	if (Hit)
 	{
-		AimTracePoint = HitResult.Location;
+		ControlledTank->SetAimPoint(HitResult.Location);
 		UE_LOG(LogTankGame, Log, TEXT("Successful AimTrace -> %s"), *HitResult.Location.ToString())
 	}
-	else
-		AimTracePoint = StartLocation;
+	else ControlledTank->SetAimPoint(EndLocation);
 	return Hit;
 }

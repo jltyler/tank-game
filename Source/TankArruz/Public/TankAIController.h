@@ -16,7 +16,19 @@ class TANKARRUZ_API ATankAIController : public AAIController
 	GENERATED_BODY()
 public:
 	void BeginPlay() override;
-	
+
+protected:
+	bool SetupTank();
+
+	bool SetupPlayerTank();
+
+public:
 	ATank * GetControlledTank() const;
 	ATank * GetPlayerTank() const;
+
+	void AimAtPlayer();
+
+protected:
+	ATank * ControlledTank = nullptr;
+	ATank * PlayerTank = nullptr;
 };

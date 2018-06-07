@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Public/Tank.h"
+#include "TankArruz.h"
 
 
 // Sets default values
@@ -32,3 +33,13 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ATank::SetAimPoint(const FVector & Position)
+{
+	AimPoint = Position;
+	UE_LOG(LogTankGame, Log, TEXT("%s.SetAimPoint( %s )"), *GetName(), *Position.ToCompactString())
+}
+
+FVector ATank::GetLocation()
+{
+	return RootComponent->GetComponentLocation();
+}

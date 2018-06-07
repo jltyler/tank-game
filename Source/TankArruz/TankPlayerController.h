@@ -23,11 +23,9 @@ protected:
 	ATank * ControlledTank = nullptr;
 	
 	void AimTowardsCrosshair();
-	void GetAimPointV();
-	bool GetAimPoint();
+	void FindAimPointV();
+	bool FindAimPoint();
 	bool AimTrace(const FVector & Location, const FVector & Direction, const float length);
-	UPROPERTY(BlueprintReadOnly)
-	FVector AimTracePoint;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float AimTraceLength = 5000.0f;
 };
