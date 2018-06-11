@@ -21,7 +21,7 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTankGame, Error, TEXT("%s(%d).ControlledTank is NULL!"), *GetName(), GetUniqueID())
 
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::FindAimPointV, 1.f, true);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::FindAimPointV, 0.2f, true);
 
 }
 

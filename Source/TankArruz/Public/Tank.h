@@ -47,9 +47,9 @@ protected:
 	FVector AimPoint;
 	UAimingComponent * AimingComponent = nullptr;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
-	float LaunchSpeed = 1000.f;
+	float LaunchSpeed = 3500.f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float AimYawSpeed = 30.0f;
+		float AimYawSpeed = 25.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float AimPitchSpeed = 30.0f;
+		float AimPitchSpeed = 10.0f;
 };
