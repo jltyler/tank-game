@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Public/Tank.h"
+#include "Public/AimingComponent.h"
 #include "TankArruz.h"
 
 
@@ -40,7 +41,32 @@ void ATank::SetAimPoint(const FVector & Position)
 
 
 
+FVector ATank::GetAimPoint() const
+{
+	return AimingComponent->GetAimPoint();
+}
+
 FVector ATank::GetLocation()
 {
 	return RootComponent->GetComponentLocation();
+}
+
+void ATank::SetBarrelComponent(UStaticMeshComponent * NewBarrel)
+{
+	AimingComponent->BarrelComponent = NewBarrel;
+}
+
+UStaticMeshComponent * ATank::GetBarrelComponent() const
+{
+	return AimingComponent->BarrelComponent;
+}
+
+void ATank::SetTurretComponent(UStaticMeshComponent * NewTurret)
+{
+	AimingComponent->TurretComponent = NewTurret;
+}
+
+UStaticMeshComponent * ATank::GetTurretComponent() const
+{
+	return AimingComponent->TurretComponent;
 }

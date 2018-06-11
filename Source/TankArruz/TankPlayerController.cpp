@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "TankArruz.h"
+#include "Public/Tank.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"

@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "TankArruz.h"
 #include "Public/TimerManager.h"
+#include "Public/Tank.h"
 
 
 void ATankAIController::BeginPlay()

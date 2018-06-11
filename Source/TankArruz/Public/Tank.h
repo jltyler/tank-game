@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Public/AimingComponent.h"
 #include "Tank.generated.h"
+
+class UAimingComponent;
 
 UCLASS()
 class TANKARRUZ_API ATank : public APawn
@@ -30,17 +31,17 @@ public:
 	// Set point at which the Tank will attempt to fire at
 	void SetAimPoint(const FVector & Position);
 	UFUNCTION(BlueprintCallable)
-	FVector GetAimPoint() const { return AimingComponent->GetAimPoint(); }
+	FVector GetAimPoint() const;
 	FVector GetLocation();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelComponent(UStaticMeshComponent * NewBarrel) { AimingComponent->BarrelComponent = NewBarrel; }
+	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	UStaticMeshComponent * GetBarrelComponent() { return AimingComponent->BarrelComponent; }
+	UStaticMeshComponent * GetBarrelComponent() const;
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretComponent(UStaticMeshComponent * NewTurret) { AimingComponent->TurretComponent = NewTurret; }
+	void SetTurretComponent(UStaticMeshComponent * NewTurret);
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	UStaticMeshComponent * GetTurretComponent() { return AimingComponent->TurretComponent; }
+	UStaticMeshComponent * GetTurretComponent() const; 
 
 protected:
 	FVector AimPoint;
