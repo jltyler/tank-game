@@ -29,19 +29,23 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Set point at which the Tank will attempt to fire at
-	void SetAimPoint(const FVector & Position);
+	bool FindTrajectory(const FVector & IdealPosition);
 	UFUNCTION(BlueprintCallable)
-	FVector GetAimPoint() const;
 	FVector GetLocation();
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = TurretSetup)
 	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = TurretInfo)
 	UStaticMeshComponent * GetBarrelComponent() const;
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = TurretSetup)
 	void SetTurretComponent(UStaticMeshComponent * NewTurret);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	UStaticMeshComponent * GetTurretComponent() const; 
+	UFUNCTION(BlueprintCallable, Category = TurretInfo)
+	UStaticMeshComponent * GetTurretComponent() const;
+	UFUNCTION(BlueprintCallable, Category = TurretSetup)
+	void SetFirePoint(USceneComponent * NewFirePoint);
+	UFUNCTION(BlueprintCallable, Category = TurretInfo)
+	USceneComponent * GetFirePoint() const;
+
 
 protected:
 	FVector AimPoint;

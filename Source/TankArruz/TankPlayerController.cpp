@@ -65,12 +65,8 @@ bool ATankPlayerController::AimTrace(const FVector & StartLocation, const FVecto
 	FCollisionQueryParams CQuery;
 	CQuery.AddIgnoredActor(GetPawn());
 	bool Hit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_WorldStatic, CQuery);
-	if (Hit)
-	{
-		ControlledTank->SetAimPoint(HitResult.Location);
-		DrawDebugSphere(GetWorld(), HitResult.Location, 100.0f, 8, FColor::Cyan, true, 1.5f, 0, 5.0f);
-		UE_LOG(LogTankGame, Log, TEXT("Successful AimTrace -> %s"), *HitResult.Location.ToString())
-	}
-	else ControlledTank->SetAimPoint(EndLocation);
+	if (Hit) EndLocation = HitResult.Location;
+	DrawDebugSphere(GetWorld(), EndLocation, 100.0f, 8, Hit ? FColor::Emerald : FColor::Red, true, 1.5f, 0, 5.0f);
+	ControlledTank->FindTrajectory(EndLocation);
 	return Hit;
 }

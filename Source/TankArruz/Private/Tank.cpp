@@ -3,6 +3,7 @@
 #include "Public/Tank.h"
 #include "Public/AimingComponent.h"
 #include "TankArruz.h"
+#include "Classes/Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -34,16 +35,23 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ATank::SetAimPoint(const FVector & Position)
+bool ATank::FindTrajectory(const FVector & IdealPosition)
 {
-	AimingComponent->SetAimPoint(Position);
-}
+	FVector FinalVelocity;
 
+	FVector StartPosition(GetActorLocation());
+	if (GetFirePoint()) StartPosition = GetFirePoint()->GetComponentLocation();
 
-
-FVector ATank::GetAimPoint() const
-{
-	return AimingComponent->GetAimPoint();
+	bool ArcFound = UGameplayStatics::SuggestProjectileVelocity(
+		this, FinalVelocity, StartPosition, IdealPosition, LaunchSpeed,
+		false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
+	if (ArcFound)
+	{
+		FRotator NewRotation = FinalVelocity.Rotation();
+		AimingComponent->SetAimPitch(NewRotation.Pitch);
+		AimingComponent->SetAimYaw(NewRotation.Yaw);
+	}
+	return ArcFound;
 }
 
 FVector ATank::GetLocation()
@@ -53,20 +61,30 @@ FVector ATank::GetLocation()
 
 void ATank::SetBarrelComponent(UStaticMeshComponent * NewBarrel)
 {
-	AimingComponent->BarrelComponent = NewBarrel;
+	AimingComponent->SetBarrelComponent(NewBarrel);
 }
 
 UStaticMeshComponent * ATank::GetBarrelComponent() const
 {
-	return AimingComponent->BarrelComponent;
+	return AimingComponent->GetBarrelComponent();
 }
 
 void ATank::SetTurretComponent(UStaticMeshComponent * NewTurret)
 {
-	AimingComponent->TurretComponent = NewTurret;
+	AimingComponent->SetTurretComponent(NewTurret);
 }
 
 UStaticMeshComponent * ATank::GetTurretComponent() const
 {
-	return AimingComponent->TurretComponent;
+	return AimingComponent->GetTurretComponent();
+}
+
+void ATank::SetFirePoint(USceneComponent * NewFirePoint)
+{
+	AimingComponent->SetFirePoint(NewFirePoint);
+}
+
+USceneComponent * ATank::GetFirePoint() const
+{
+	return AimingComponent->GetFirePoint();
 }

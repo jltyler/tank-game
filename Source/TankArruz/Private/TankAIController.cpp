@@ -65,5 +65,5 @@ void ATankAIController::AimAtPlayer()
 {
 	if (!PlayerTank || !ControlledTank) return;
 
-	ControlledTank->SetAimPoint(PlayerTank->GetActorLocation());
+	ControlledTank->FindTrajectory(PlayerTank->GetActorLocation());
 }
