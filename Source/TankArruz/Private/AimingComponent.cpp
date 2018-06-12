@@ -39,6 +39,8 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	{
 		auto Pitch = BarrelComponent->GetComponentRotation().Pitch;
 		auto Diff = DesiredPitch - Pitch;
+		if (Diff < -180) Diff += 360;
+		if (Diff > 180) Diff -= 360;
 		auto TurnSpeed = PitchPerSecond * DeltaTime;
 		if (FMath::Abs<float>(Diff) < TurnSpeed)
 			BarrelComponent->AddLocalRotation(FRotator(Diff, 0.0f, 0.0f));
@@ -50,6 +52,8 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	{
 		auto Yaw = TurretComponent->GetComponentRotation().Yaw;
 		auto Diff = DesiredYaw - Yaw;
+		if (Diff < -180) Diff += 360;
+		if (Diff > 180) Diff -= 360;
 		auto TurnSpeed = YawPerSecond * DeltaTime;
 		if (FMath::Abs<float>(Diff) < TurnSpeed)
 			TurretComponent->AddLocalRotation(FRotator(0.0f, Diff, 0.0f));
