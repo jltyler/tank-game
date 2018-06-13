@@ -60,4 +60,5 @@ protected:
 	float AimPitchSpeed = 10.0f;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Weapon)
 	TSubclassOf<AProjectile> WeaponProjectile;
+	USceneComponent * FirePoint = nullptr;
 };

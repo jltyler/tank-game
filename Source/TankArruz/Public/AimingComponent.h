@@ -40,15 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Getters)
 	UStaticMeshComponent * GetTurretComponent() const;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetFirePoint(USceneComponent * NewFirePoint);
-	UFUNCTION(BlueprintCallable, Category = Getters)
-	USceneComponent * GetFirePoint() const;
-
 protected:
 	UStaticMeshComponent * BarrelComponent = nullptr;
 	UStaticMeshComponent * TurretComponent = nullptr;
-	USceneComponent * FirePoint = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float MinYaw = -180.0f;

@@ -81,10 +81,10 @@ UStaticMeshComponent * ATank::GetTurretComponent() const
 
 void ATank::SetFirePoint(USceneComponent * NewFirePoint)
 {
-	AimingComponent->SetFirePoint(NewFirePoint);
+	FirePoint = NewFirePoint;
 }
 
 USceneComponent * ATank::GetFirePoint() const
 {
-	return AimingComponent->GetFirePoint();
+	return FirePoint;
 }

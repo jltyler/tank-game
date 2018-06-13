@@ -26,8 +26,6 @@ void UAimingComponent::BeginPlay()
 	UE_LOG(LogTankGame, Error, TEXT("%s aiming component has NULL BarrelComponent"), *GetOwner()->GetName())
 	if (!TurretComponent)
 	UE_LOG(LogTankGame, Error, TEXT("%s aiming component has NULL TurretComponent"), *GetOwner()->GetName())
-	if (!FirePoint)
-	UE_LOG(LogTankGame, Error, TEXT("%s aiming component has NULL FirePoint"), *GetOwner()->GetName())
 }
 
 // Called every frame
@@ -100,14 +98,4 @@ void UAimingComponent::SetTurretComponent(UStaticMeshComponent * NewTurret)
 UStaticMeshComponent * UAimingComponent::GetTurretComponent() const
 {
 	return TurretComponent;
-}
-
-void UAimingComponent::SetFirePoint(USceneComponent * NewFirePoint)
-{
-	FirePoint = NewFirePoint;
-}
-
-USceneComponent * UAimingComponent::GetFirePoint() const
-{
-	return FirePoint;
 }
