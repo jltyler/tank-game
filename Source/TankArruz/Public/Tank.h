@@ -29,6 +29,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void Fire();
 
 	// Set point at which the Tank will attempt to fire at

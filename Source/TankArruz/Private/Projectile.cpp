@@ -9,6 +9,8 @@ AProjectile::AProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Movement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement"));
+	Movement->bAutoActivate = false;
+	Movement->bRotationFollowsVelocity = true;
 }
 
 void AProjectile::SetVelocity(const FVector & NewVelocity)

@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Movement)
 	UProjectileMovementComponent * Movement = nullptr;
 	
 };

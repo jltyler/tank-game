@@ -29,6 +29,8 @@ public:
 	void AimAtPlayer();
 
 protected:
+	UPROPERTY(BlueprintReadOnly, Category = Tanks)
 	ATank * ControlledTank = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = Tanks)
 	ATank * PlayerTank = nullptr;
 };
