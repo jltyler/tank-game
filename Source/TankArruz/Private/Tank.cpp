@@ -4,6 +4,8 @@
 #include "Public/AimingComponent.h"
 #include "TankArruz.h"
 #include "Classes/Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "Public/Projectile.h"
 
 
 // Sets default values
@@ -32,7 +34,16 @@ void ATank::Tick(float DeltaTime)
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ATank::Fire);
+}
 
+void ATank::Fire()
+{
+	FVector SpawnLocation(FirePoint ? FirePoint->GetComponentLocation() : GetActorLocation());
+	AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, FRotator(), FActorSpawnParameters());
+	if (Fired) Fired->SetVelocity(AimingComponent->GetAimVector() * LaunchSpeed);
+	else
+		UE_LOG(LogTankGame, Error, TEXT("Tried to fire but got NULL back!"))
 }
 
 bool ATank::FindTrajectory(const FVector & IdealPosition)

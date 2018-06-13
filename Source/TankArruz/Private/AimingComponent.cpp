@@ -33,69 +33,77 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (BarrelComponent)
-	{
-		auto Pitch = BarrelComponent->GetComponentRotation().Pitch;
-		auto Diff = DesiredPitch - Pitch;
-		if (Diff < -180) Diff += 360;
-		if (Diff > 180) Diff -= 360;
-		auto TurnSpeed = PitchPerSecond * DeltaTime;
-		if (FMath::Abs<float>(Diff) < TurnSpeed)
-			BarrelComponent->AddLocalRotation(FRotator(Diff, 0.0f, 0.0f));
-		else
-			BarrelComponent->AddLocalRotation(FRotator(FMath::Sign(Diff) * TurnSpeed, 0.0f, 0.0f));
-	}
-
-	if (TurretComponent)
-	{
-		auto Yaw = TurretComponent->GetComponentRotation().Yaw;
-		auto Diff = DesiredYaw - Yaw;
-		if (Diff < -180) Diff += 360;
-		if (Diff > 180) Diff -= 360;
-		auto TurnSpeed = YawPerSecond * DeltaTime;
-		if (FMath::Abs<float>(Diff) < TurnSpeed)
-			TurretComponent->AddLocalRotation(FRotator(0.0f, Diff, 0.0f));
-		else
-			TurretComponent->AddLocalRotation(FRotator(0.0f, FMath::Sign(Diff) * TurnSpeed, 0.0f));
-	}
+	if (BarrelComponent) UpdateBarrelRotation(DeltaTime);
+	if (TurretComponent) UpdateTurretRotation(DeltaTime);
 }
 
-void UAimingComponent::SetAimYaw(float NewYaw)
+void UAimingComponent::UpdateBarrelRotation(float DeltaTime)
+{
+	auto Pitch = BarrelComponent->GetComponentRotation().Pitch;
+	auto Diff = DesiredPitch - Pitch;
+	if (Diff < -180) Diff += 360;
+	if (Diff > 180) Diff -= 360;
+	auto TurnSpeed = PitchPerSecond * DeltaTime;
+	if (FMath::Abs<float>(Diff) < TurnSpeed)
+		BarrelComponent->AddLocalRotation(FRotator(Diff, 0.0f, 0.0f));
+	else
+		BarrelComponent->AddLocalRotation(FRotator(FMath::Sign(Diff) * TurnSpeed, 0.0f, 0.0f));
+}
+
+void UAimingComponent::UpdateTurretRotation(float DeltaTime)
+{
+	auto Yaw = TurretComponent->GetComponentRotation().Yaw;
+	auto Diff = DesiredYaw - Yaw;
+	if (Diff < -180) Diff += 360;
+	if (Diff > 180) Diff -= 360;
+	auto TurnSpeed = YawPerSecond * DeltaTime;
+	if (FMath::Abs<float>(Diff) < TurnSpeed)
+		TurretComponent->AddLocalRotation(FRotator(0.0f, Diff, 0.0f));
+	else
+		TurretComponent->AddLocalRotation(FRotator(0.0f, FMath::Sign(Diff) * TurnSpeed, 0.0f));
+}
+
+inline void UAimingComponent::SetAimYaw(float NewYaw)
 {
 	DesiredYaw = FMath::Clamp<float>(NewYaw, MinYaw, MaxYaw);
 }
 
-float UAimingComponent::GetAimPitch() const
+inline float UAimingComponent::GetAimPitch() const
 {
-	return BarrelComponent->GetComponentRotation().Pitch;
+	return BarrelComponent ? BarrelComponent->GetComponentRotation().Pitch : 0.0f;
 }
 
-void UAimingComponent::SetAimPitch(float NewPitch)
+inline void UAimingComponent::SetAimPitch(float NewPitch)
 {
 	DesiredPitch = FMath::Clamp<float>(NewPitch, MinPitch, MaxPitch);
 }
 
-float UAimingComponent::GetAimYaw() const
+inline float UAimingComponent::GetAimYaw() const
 {
-	return BarrelComponent->GetComponentRotation().Yaw;
+	return TurretComponent ? TurretComponent->GetComponentRotation().Yaw : 0.0f;
 }
 
-void UAimingComponent::SetBarrelComponent(UStaticMeshComponent * NewBarrel)
+inline FVector UAimingComponent::GetAimVector() const
+{
+	return BarrelComponent ? BarrelComponent->GetComponentRotation().Vector() : FVector(0);
+}
+
+inline void UAimingComponent::SetBarrelComponent(UStaticMeshComponent * NewBarrel)
 {
 	BarrelComponent = NewBarrel;
 }
 
-UStaticMeshComponent * UAimingComponent::GetBarrelComponent() const
+inline UStaticMeshComponent * UAimingComponent::GetBarrelComponent() const
 {
 	return BarrelComponent;
 }
 
-void UAimingComponent::SetTurretComponent(UStaticMeshComponent * NewTurret)
+inline void UAimingComponent::SetTurretComponent(UStaticMeshComponent * NewTurret)
 {
 	TurretComponent = NewTurret;
 }
 
-UStaticMeshComponent * UAimingComponent::GetTurretComponent() const
+inline UStaticMeshComponent * UAimingComponent::GetTurretComponent() const
 {
 	return TurretComponent;
 }

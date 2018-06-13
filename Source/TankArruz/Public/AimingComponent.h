@@ -24,11 +24,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void UpdateBarrelRotation(float DeltaTime);
+	void UpdateTurretRotation(float DeltaTime);
+
 	void SetAimYaw(float NewYaw);
 	float GetAimPitch() const;
 	void SetAimPitch(float NewPitch);
-
 	float GetAimYaw() const;
+
+	FVector GetAimVector() const;
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
@@ -44,18 +48,18 @@ protected:
 	UStaticMeshComponent * BarrelComponent = nullptr;
 	UStaticMeshComponent * TurretComponent = nullptr;
 
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float MinYaw = -180.0f;
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float MaxYaw = 180.0f;
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float YawPerSecond = 25.0f;
 
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float MinPitch = 0.0f;
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float MaxPitch = 45.0f;
-	UPROPERTY(BlueprintReadWrite, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
 	float PitchPerSecond = 10.0f;
 
 	UPROPERTY(BlueprintReadOnly, Category = Runtime)

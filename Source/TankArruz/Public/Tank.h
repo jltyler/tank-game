@@ -29,6 +29,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Fire();
+
 	// Set point at which the Tank will attempt to fire at
 	bool FindTrajectory(const FVector & IdealPosition);
 	UFUNCTION(BlueprintCallable)

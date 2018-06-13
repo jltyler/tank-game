@@ -17,7 +17,6 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
-protected:
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void SetVelocity(const FVector & Velocity);
 	// Called when the game starts or when spawned
