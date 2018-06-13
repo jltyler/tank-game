@@ -30,11 +30,19 @@ public:
 
 	float GetAimYaw() const;
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
+	UFUNCTION(BlueprintCallable, Category = Getters)
 	UStaticMeshComponent * GetBarrelComponent() const;
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretComponent(UStaticMeshComponent * NewTurret);
+	UFUNCTION(BlueprintCallable, Category = Getters)
 	UStaticMeshComponent * GetTurretComponent() const;
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetFirePoint(USceneComponent * NewFirePoint);
+	UFUNCTION(BlueprintCallable, Category = Getters)
 	USceneComponent * GetFirePoint() const;
 
 protected:
@@ -42,14 +50,22 @@ protected:
 	UStaticMeshComponent * TurretComponent = nullptr;
 	USceneComponent * FirePoint = nullptr;
 
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float MinYaw = -180.0f;
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float MaxYaw = 180.0f;
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float YawPerSecond = 25.0f;
 
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float MinPitch = 0.0f;
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float MaxPitch = 45.0f;
+	UPROPERTY(BlueprintReadWrite, Category = Constraints)
 	float PitchPerSecond = 10.0f;
 
+	UPROPERTY(BlueprintReadOnly, Category = Runtime)
 	float DesiredYaw = 0.0f;
+	UPROPERTY(BlueprintReadOnly, Category = Runtime)
 	float DesiredPitch = 0.0f;
 };

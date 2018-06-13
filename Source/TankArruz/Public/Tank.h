@@ -7,6 +7,7 @@
 #include "Tank.generated.h"
 
 class UAimingComponent;
+class AProjectile;
 
 UCLASS()
 class TANKARRUZ_API ATank : public APawn
@@ -49,11 +50,14 @@ public:
 
 protected:
 	FVector AimPoint;
+	UPROPERTY(BlueprintReadOnly, Category = Turret)
 	UAimingComponent * AimingComponent = nullptr;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
 	float LaunchSpeed = 3500.f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float AimYawSpeed = 25.0f;
+	float AimYawSpeed = 25.0f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float AimPitchSpeed = 10.0f;
+	float AimPitchSpeed = 10.0f;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Weapon)
+	TSubclassOf<AProjectile> WeaponProjectile;
 };
