@@ -20,14 +20,14 @@ protected:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
-	ATank * GetControlledTank() const;
+	ATank * FindPlayerTank() const;
+	UPROPERTY(BlueprintReadOnly, Category = Pawn)
 	ATank * ControlledTank = nullptr;
 	
-	void AimTowardsCrosshair();
 	void FindAimPointV();
 	bool FindAimPoint();
 	bool AimTrace(const FVector & Location, const FVector & Direction, const float length);
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float AimTraceLength = 20000.0f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	float AimTraceLength = 20000.0f;
 
 };

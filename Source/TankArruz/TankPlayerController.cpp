@@ -14,9 +14,9 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	ControlledTank = GetControlledTank();
+	ControlledTank = FindPlayerTank();
 	if (ControlledTank)
-		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *GetControlledTank()->GetName())
+		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *ControlledTank->GetName())
 	else
 		UE_LOG(LogTankGame, Error, TEXT("%s(%d).ControlledTank is NULL!"), *GetName(), GetUniqueID())
 
@@ -30,14 +30,9 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
-ATank * ATankPlayerController::GetControlledTank() const
+ATank * ATankPlayerController::FindPlayerTank() const
 {
 	return Cast<ATank>(GetPawn());
-}
-
-void ATankPlayerController::AimTowardsCrosshair()
-{
-	
 }
 
 void ATankPlayerController::FindAimPointV()

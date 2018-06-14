@@ -57,11 +57,11 @@ protected:
 	UAimingComponent * AimingComponent = nullptr;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
 	float LaunchSpeed = 3500.f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AimYawSpeed = 25.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	float AimPitchSpeed = 10.0f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
+	float ReloadTime = 1.4f;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Weapon)
 	TSubclassOf<AProjectile> WeaponProjectile;
 	USceneComponent * FirePoint = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = Weapon)
+	bool Reloaded = true;
 };
