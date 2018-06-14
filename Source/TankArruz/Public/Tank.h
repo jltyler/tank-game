@@ -53,7 +53,7 @@ public:
 
 protected:
 	FVector AimPoint;
-	UPROPERTY(BlueprintReadOnly, Category = Turret)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Turret)
 	UAimingComponent * AimingComponent = nullptr;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
 	float LaunchSpeed = 3500.f;
