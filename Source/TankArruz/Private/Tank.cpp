@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "Public/Projectile.h"
 #include "Public/TimerManager.h"
+#include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -112,4 +113,43 @@ void ATank::SetFirePoint(USceneComponent * NewFirePoint)
 USceneComponent * ATank::GetFirePoint() const
 {
 	return FirePoint;
+}
+
+void ATank::SetBody(UStaticMeshComponent * NewBody)
+{
+	Body = NewBody;
+}
+
+void ATank::SetLeftTrack(UStaticMeshComponent * NewLeftTrack)
+{
+	LeftTrack = NewLeftTrack;
+}
+
+void ATank::SetRightTrack(UStaticMeshComponent * NewRightTrack)
+{
+	RightTrack = NewRightTrack;
+}
+
+void ATank::MoveForward(float Axis)
+{
+	if (Body && LeftTrack && RightTrack)
+	{
+		FVector ForceVector = GetActorRotation().Vector() * Axis * ForwardForce;
+		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
+		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
+	}
+	else
+		UE_LOG(LogTankGame, Error, TEXT("%s is missing Movement references!"), *GetName())
+}
+
+void ATank::TurnRight(float Axis)
+{
+	if (Body && LeftTrack && RightTrack)
+	{
+		FVector ForceVector = GetActorRotation().Vector() * Axis * ForwardForce;
+		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
+		Body->AddForceAtLocation(ForceVector * -1, RightTrack->GetComponentLocation());
+	}
+	else
+		UE_LOG(LogTankGame, Error, TEXT("%s is missing Movement references!"), *GetName())
 }

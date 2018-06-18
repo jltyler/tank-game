@@ -50,18 +50,51 @@ public:
 	UFUNCTION(BlueprintCallable, Category = TurretInfo)
 	USceneComponent * GetFirePoint() const;
 
+	UFUNCTION(BlueprintCallable, Category = MovementSetup)
+	void SetBody(UStaticMeshComponent * NewBody);
+	UFUNCTION(BlueprintCallable, Category = MovementSetup)
+	void SetLeftTrack(UStaticMeshComponent * NewLeftTrack);
+	UFUNCTION(BlueprintCallable, Category = MovementSetup)
+	void SetRightTrack(UStaticMeshComponent * NewRightTrack);
+
+	UFUNCTION(BlueprintCallable, Category = Movement)
+	void MoveForward(float Axis);
+	UFUNCTION(BlueprintCallable, Category = Movement)
+	void TurnRight(float Axis);
+
+
 
 protected:
-	FVector AimPoint;
+	/// Weapon stuff
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Turret)
 	UAimingComponent * AimingComponent = nullptr;
+	// Projectile launch speed for trajectory calculation
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
 	float LaunchSpeed = 3500.f;
+	// Time in seconds before Tank can fire again
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
 	float ReloadTime = 1.4f;
+	// AProjectile child class to fire
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Weapon)
 	TSubclassOf<AProjectile> WeaponProjectile;
+	// Where the projectile spawns when fired
 	USceneComponent * FirePoint = nullptr;
 	UPROPERTY(BlueprintReadOnly, Category = Weapon)
 	bool Reloaded = true;
+
+	/// Movement stuff
+	// Body mesh to use for movement
+	UStaticMeshComponent * Body = nullptr;
+	// Left Track to use for movement
+	UStaticMeshComponent * LeftTrack = nullptr;
+	// Right Track to use for movement
+	UStaticMeshComponent * RightTrack = nullptr;
+
+	// Force multiplier when moving forwards or backwards
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
+	float ForwardForce = 100000.0f;
+	// Force multiplier when turning left or right
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
+	float TurnForce = 10000.0f;
+
 };
