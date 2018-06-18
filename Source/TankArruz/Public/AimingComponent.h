@@ -48,22 +48,22 @@ protected:
 	UStaticMeshComponent * BarrelComponent = nullptr;
 	UStaticMeshComponent * TurretComponent = nullptr;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float MinYaw = -180.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float MaxYaw = 180.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float YawPerSecond = 25.0f;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float MinPitch = 0.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float MaxPitch = 45.0f;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Constraints)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Constraints)
 	float PitchPerSecond = 10.0f;
 
-	UPROPERTY(BlueprintReadOnly, Category = Runtime)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Runtime)
 	float DesiredYaw = 0.0f;
-	UPROPERTY(BlueprintReadOnly, Category = Runtime)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Runtime)
 	float DesiredPitch = 0.0f;
 };

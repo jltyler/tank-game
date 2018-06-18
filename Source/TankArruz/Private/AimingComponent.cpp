@@ -39,8 +39,8 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UAimingComponent::UpdateBarrelRotation(float DeltaTime)
 {
-	auto Pitch = BarrelComponent->GetComponentRotation().Pitch;
-	auto Diff = DesiredPitch - Pitch;
+	auto WorldPitch = BarrelComponent->GetComponentRotation().Pitch;
+	auto Diff = DesiredPitch - WorldPitch;
 	if (Diff < -180) Diff += 360;
 	if (Diff > 180) Diff -= 360;
 	auto TurnSpeed = PitchPerSecond * DeltaTime;
@@ -65,7 +65,8 @@ void UAimingComponent::UpdateTurretRotation(float DeltaTime)
 
 inline void UAimingComponent::SetAimYaw(float NewYaw)
 {
-	DesiredYaw = FMath::Clamp<float>(NewYaw, MinYaw, MaxYaw);
+	DesiredYaw = NewYaw;
+	//DesiredYaw = FMath::Clamp<float>(NewYaw, MinYaw, MaxYaw);
 }
 
 inline float UAimingComponent::GetAimPitch() const
@@ -75,7 +76,8 @@ inline float UAimingComponent::GetAimPitch() const
 
 inline void UAimingComponent::SetAimPitch(float NewPitch)
 {
-	DesiredPitch = FMath::Clamp<float>(NewPitch, MinPitch, MaxPitch);
+	DesiredPitch = NewPitch;
+	//DesiredPitch = FMath::Clamp<float>(NewPitch, MinPitch, MaxPitch);
 }
 
 inline float UAimingComponent::GetAimYaw() const
