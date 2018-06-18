@@ -130,6 +130,16 @@ void ATank::SetRightTrack(UStaticMeshComponent * NewRightTrack)
 	RightTrack = NewRightTrack;
 }
 
+inline void ATank::LeftTrackForward(const float Axis)
+{
+	if (LeftTrack) Body->AddForceAtLocation(GetActorRotation().Vector() * ForwardForce * Axis, LeftTrack->GetComponentLocation());
+}
+
+inline void ATank::RightTrackForward(const float Axis)
+{
+	if (RightTrack) Body->AddForceAtLocation(GetActorRotation().Vector() * ForwardForce * Axis, RightTrack->GetComponentLocation());
+}
+
 void ATank::MoveForward(float Axis)
 {
 	if (Body && LeftTrack && RightTrack)

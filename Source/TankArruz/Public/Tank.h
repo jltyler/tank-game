@@ -56,7 +56,10 @@ public:
 	void SetLeftTrack(UStaticMeshComponent * NewLeftTrack);
 	UFUNCTION(BlueprintCallable, Category = MovementSetup)
 	void SetRightTrack(UStaticMeshComponent * NewRightTrack);
-
+	UFUNCTION(BlueprintCallable, Category = Movement)
+	void LeftTrackForward(const float Axis);
+	UFUNCTION(BlueprintCallable, Category = Movement)
+	void RightTrackForward(const float Axis);
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void MoveForward(float Axis);
 	UFUNCTION(BlueprintCallable, Category = Movement)
@@ -69,13 +72,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Turret)
 	UAimingComponent * AimingComponent = nullptr;
 	// Projectile launch speed for trajectory calculation
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Weapon)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
 	float LaunchSpeed = 3500.f;
 	// Time in seconds before Tank can fire again
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
 	float ReloadTime = 1.4f;
 	// AProjectile child class to fire
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Weapon)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
 	TSubclassOf<AProjectile> WeaponProjectile;
 	// Where the projectile spawns when fired
 	USceneComponent * FirePoint = nullptr;
@@ -92,9 +95,9 @@ protected:
 
 	// Force multiplier when moving forwards or backwards
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
-	float ForwardForce = 100000.0f;
+	float ForwardForce = 4000000.0f;
 	// Force multiplier when turning left or right
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
-	float TurnForce = 10000.0f;
+	float TurnForce = 4000000.0f;
 
 };
