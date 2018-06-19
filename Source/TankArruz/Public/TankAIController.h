@@ -17,15 +17,13 @@ class TANKARRUZ_API ATankAIController : public AAIController
 	GENERATED_BODY()
 public:
 	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
 
 protected:
 	bool SetupTank();
 	bool SetupPlayerTank();
 
 public:
-	ATank * GetControlledTank() const;
-	ATank * GetPlayerTank() const;
-
 	void AimAtPlayer();
 
 protected:
@@ -33,4 +31,6 @@ protected:
 	ATank * ControlledTank = nullptr;
 	UPROPERTY(BlueprintReadOnly, Category = Tanks)
 	ATank * PlayerTank = nullptr;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Pathfinding)
+	float PursueDistance = 10000.0f;
 };

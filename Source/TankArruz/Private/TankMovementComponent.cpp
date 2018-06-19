@@ -2,6 +2,8 @@
 
 #include "Public/TankMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "TankArruz.h"
+#include "DrawDebugHelpers.h"
 
 void UTankMovementComponent::SetBody(UStaticMeshComponent * NewBody)
 {
@@ -42,8 +44,18 @@ void UTankMovementComponent::TurnRight(const float Axis)
 {
 	if (Body && LeftTrack && RightTrack)
 	{
-		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier;
+		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier * TurnForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
 		Body->AddForceAtLocation(-ForceVector, RightTrack->GetComponentLocation());
 	}
+}
+
+void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
+{
+	auto MoveUnit = MoveVelocity.GetSafeNormal();
+	auto ActorUnit = GetOwner()->GetActorForwardVector();
+	auto Dot = FVector::DotProduct(MoveUnit, ActorUnit);
+	MoveForward(Dot);
+	auto Cross = FVector::CrossProduct(MoveUnit, ActorUnit);
+	TurnRight(Cross.Z); // TODO: rotate so cross z points directly up
 }

@@ -16,9 +16,18 @@ void ATankAIController::BeginPlay()
 	if (ControlledTank && PlayerTank)
 	{
 		FTimerHandle TimerHandle;
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankAIController::AimAtPlayer, 1.f, true);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankAIController::AimAtPlayer, 0.5f, true);
 	}
 
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	if (ControlledTank && PlayerTank)
+	{
+		auto result = MoveToActor(PlayerTank, PursueDistance, true, true, true);
+		//if (result == EPathFollowingRequestResult::Failed) UE_LOG(LogTankGame, Error, TEXT("%s controller failed to pathfind!"), *ControlledTank->GetName())
+	}
 }
 
 bool ATankAIController::SetupTank()
@@ -26,7 +35,7 @@ bool ATankAIController::SetupTank()
 	ControlledTank = Cast<ATank>(GetPawn());
 	if (ControlledTank)
 	{
-		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *GetControlledTank()->GetName())
+		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *ControlledTank->GetName())
 		return true;
 	}
 	else
@@ -49,16 +58,6 @@ bool ATankAIController::SetupPlayerTank()
 		UE_LOG(LogTankGame, Error, TEXT("%s could not find player tank!"), *GetName())
 		return false;
 	}
-}
-
-ATank * ATankAIController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-ATank * ATankAIController::GetPlayerTank() const
-{
-	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 void ATankAIController::AimAtPlayer()
