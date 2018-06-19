@@ -2,6 +2,7 @@
 
 #include "Public/Tank.h"
 #include "Public/AimingComponent.h"
+#include "Public/TankMovementComponent.h"
 #include "TankArruz.h"
 #include "Classes/Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -17,6 +18,7 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AimingComponent = CreateDefaultSubobject<UAimingComponent>(FName("Aiming Component"));
+	MovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +42,20 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ATank::Fire);
 }
 
+void ATank::SetupAiming(UStaticMeshComponent * NewBarrelComponent, UStaticMeshComponent * NewTurretComponent, USceneComponent * NewFirePoint)
+{
+	AimingComponent->SetBarrelComponent(NewBarrelComponent);
+	AimingComponent->SetTurretComponent(NewTurretComponent);
+	FirePoint = NewFirePoint;
+}
+
+void ATank::SetupMovement(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack)
+{
+	MovementComponent->SetBody(NewBody);
+	MovementComponent->SetLeftTrack(NewLeftTrack);
+	MovementComponent->SetRightTrack(NewRightTrack);
+}
+
 void ATank::Fire()
 {
 	if (Reloaded)
@@ -59,6 +75,11 @@ void ATank::Fire()
 		else
 			UE_LOG(LogTankGame, Error, TEXT("Tried to fire but got NULL back!"))
 	}
+}
+
+bool ATank::IsReloaded() const
+{
+	return Reloaded;
 }
 
 bool ATank::FindTrajectory(const FVector & IdealPosition)
@@ -85,26 +106,6 @@ FVector ATank::GetLocation()
 	return RootComponent->GetComponentLocation();
 }
 
-void ATank::SetBarrelComponent(UStaticMeshComponent * NewBarrel)
-{
-	AimingComponent->SetBarrelComponent(NewBarrel);
-}
-
-UStaticMeshComponent * ATank::GetBarrelComponent() const
-{
-	return AimingComponent->GetBarrelComponent();
-}
-
-void ATank::SetTurretComponent(UStaticMeshComponent * NewTurret)
-{
-	AimingComponent->SetTurretComponent(NewTurret);
-}
-
-UStaticMeshComponent * ATank::GetTurretComponent() const
-{
-	return AimingComponent->GetTurretComponent();
-}
-
 void ATank::SetFirePoint(USceneComponent * NewFirePoint)
 {
 	FirePoint = NewFirePoint;
@@ -113,53 +114,4 @@ void ATank::SetFirePoint(USceneComponent * NewFirePoint)
 USceneComponent * ATank::GetFirePoint() const
 {
 	return FirePoint;
-}
-
-void ATank::SetBody(UStaticMeshComponent * NewBody)
-{
-	Body = NewBody;
-}
-
-void ATank::SetLeftTrack(UStaticMeshComponent * NewLeftTrack)
-{
-	LeftTrack = NewLeftTrack;
-}
-
-void ATank::SetRightTrack(UStaticMeshComponent * NewRightTrack)
-{
-	RightTrack = NewRightTrack;
-}
-
-inline void ATank::LeftTrackForward(const float Axis)
-{
-	if (LeftTrack) Body->AddForceAtLocation(GetActorRotation().Vector() * ForwardForce * Axis, LeftTrack->GetComponentLocation());
-}
-
-inline void ATank::RightTrackForward(const float Axis)
-{
-	if (RightTrack) Body->AddForceAtLocation(GetActorRotation().Vector() * ForwardForce * Axis, RightTrack->GetComponentLocation());
-}
-
-void ATank::MoveForward(float Axis)
-{
-	if (Body && LeftTrack && RightTrack)
-	{
-		FVector ForceVector = GetActorRotation().Vector() * Axis * ForwardForce;
-		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
-		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
-	}
-	else
-		UE_LOG(LogTankGame, Error, TEXT("%s is missing Movement references!"), *GetName())
-}
-
-void ATank::TurnRight(float Axis)
-{
-	if (Body && LeftTrack && RightTrack)
-	{
-		FVector ForceVector = GetActorRotation().Vector() * Axis * ForwardForce;
-		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
-		Body->AddForceAtLocation(ForceVector * -1, RightTrack->GetComponentLocation());
-	}
-	else
-		UE_LOG(LogTankGame, Error, TEXT("%s is missing Movement references!"), *GetName())
 }

@@ -8,6 +8,7 @@
 
 class UAimingComponent;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class TANKARRUZ_API ATank : public APawn
@@ -29,43 +30,25 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable, Category = AimingSetup)
+	void SetupAiming(UStaticMeshComponent * NewBarrelComponent, UStaticMeshComponent * NewTurretComponent, USceneComponent * NewFirePoint);
+
+	UFUNCTION(BlueprintCallable, Category = MovementSetup)
+	void SetupMovement(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack);
+
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void Fire();
-
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	bool IsReloaded() const;
 	// Set point at which the Tank will attempt to fire at
 	bool FindTrajectory(const FVector & IdealPosition);
 	UFUNCTION(BlueprintCallable)
 	FVector GetLocation();
 
 	UFUNCTION(BlueprintCallable, Category = TurretSetup)
-	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
-	UFUNCTION(BlueprintCallable, Category = TurretInfo)
-	UStaticMeshComponent * GetBarrelComponent() const;
-	UFUNCTION(BlueprintCallable, Category = TurretSetup)
-	void SetTurretComponent(UStaticMeshComponent * NewTurret);
-	UFUNCTION(BlueprintCallable, Category = TurretInfo)
-	UStaticMeshComponent * GetTurretComponent() const;
-	UFUNCTION(BlueprintCallable, Category = TurretSetup)
 	void SetFirePoint(USceneComponent * NewFirePoint);
 	UFUNCTION(BlueprintCallable, Category = TurretInfo)
 	USceneComponent * GetFirePoint() const;
-
-	UFUNCTION(BlueprintCallable, Category = MovementSetup)
-	void SetBody(UStaticMeshComponent * NewBody);
-	UFUNCTION(BlueprintCallable, Category = MovementSetup)
-	void SetLeftTrack(UStaticMeshComponent * NewLeftTrack);
-	UFUNCTION(BlueprintCallable, Category = MovementSetup)
-	void SetRightTrack(UStaticMeshComponent * NewRightTrack);
-	UFUNCTION(BlueprintCallable, Category = Movement)
-	void LeftTrackForward(const float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
-	void RightTrackForward(const float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
-	void MoveForward(float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
-	void TurnRight(float Axis);
-
-
 
 protected:
 	/// Weapon stuff
@@ -86,6 +69,8 @@ protected:
 	bool Reloaded = true;
 
 	/// Movement stuff
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Movement)
+	UTankMovementComponent * MovementComponent = nullptr;
 	// Body mesh to use for movement
 	UStaticMeshComponent * Body = nullptr;
 	// Left Track to use for movement

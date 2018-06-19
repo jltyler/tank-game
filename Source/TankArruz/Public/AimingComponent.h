@@ -27,21 +27,25 @@ public:
 	void UpdateBarrelRotation(float DeltaTime);
 	void UpdateTurretRotation(float DeltaTime);
 
+	UFUNCTION(BlueprintCallable, Category = Aiming)
 	void SetAimYaw(float NewYaw);
+	UFUNCTION(BlueprintCallable, Category = Aiming)
 	float GetAimPitch() const;
+	UFUNCTION(BlueprintCallable, Category = Aiming)
 	void SetAimPitch(float NewPitch);
+	UFUNCTION(BlueprintCallable, Category = Aiming)
 	float GetAimYaw() const;
 
 	FVector GetAimVector() const;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = References)
 	void SetBarrelComponent(UStaticMeshComponent * NewBarrel);
-	UFUNCTION(BlueprintCallable, Category = Getters)
+	UFUNCTION(BlueprintCallable, Category = References)
 	UStaticMeshComponent * GetBarrelComponent() const;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = References)
 	void SetTurretComponent(UStaticMeshComponent * NewTurret);
-	UFUNCTION(BlueprintCallable, Category = Getters)
+	UFUNCTION(BlueprintCallable, Category = References)
 	UStaticMeshComponent * GetTurretComponent() const;
 
 protected:
