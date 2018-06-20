@@ -35,6 +35,8 @@ public:
 	void SetAimPitch(float NewPitch);
 	UFUNCTION(BlueprintCallable, Category = Aiming)
 	float GetAimYaw() const;
+	UFUNCTION(BlueprintCallable, Category = Aiming)
+	bool GetLockedOn() const;
 
 	FVector GetAimVector() const;
 
@@ -47,6 +49,7 @@ public:
 	void SetTurretComponent(UStaticMeshComponent * NewTurret);
 	UFUNCTION(BlueprintCallable, Category = References)
 	UStaticMeshComponent * GetTurretComponent() const;
+
 
 protected:
 	UStaticMeshComponent * BarrelComponent = nullptr;
@@ -70,4 +73,6 @@ protected:
 	float DesiredYaw = 0.0f;
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Runtime)
 	float DesiredPitch = 0.0f;
+
+	bool LockedOn = false;
 };

@@ -58,9 +58,15 @@ void UAimingComponent::UpdateTurretRotation(float DeltaTime)
 	if (Diff > 180) Diff -= 360;
 	auto TurnSpeed = YawPerSecond * DeltaTime;
 	if (FMath::Abs<float>(Diff) < TurnSpeed)
+	{
+		LockedOn = true;
 		TurretComponent->AddLocalRotation(FRotator(0.0f, Diff, 0.0f));
+	}
 	else
+	{
+		LockedOn = false;
 		TurretComponent->AddLocalRotation(FRotator(0.0f, FMath::Sign(Diff) * TurnSpeed, 0.0f));
+	}
 }
 
 inline void UAimingComponent::SetAimYaw(float NewYaw)
@@ -83,6 +89,11 @@ inline void UAimingComponent::SetAimPitch(float NewPitch)
 inline float UAimingComponent::GetAimYaw() const
 {
 	return TurretComponent ? TurretComponent->GetComponentRotation().Yaw : 0.0f;
+}
+
+inline bool UAimingComponent::GetLockedOn() const
+{
+	return LockedOn;
 }
 
 inline FVector UAimingComponent::GetAimVector() const

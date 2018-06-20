@@ -67,19 +67,33 @@ void ATank::Fire()
 		{
 			Fired->SetVelocity(AimingComponent->GetAimVector() * LaunchSpeed);
 			Reloaded = false;
-			FTimerDelegate Callback;
-			Callback.BindLambda([this] {this->Reloaded = true; });
+			FiringStatus = ETankFiringStatus::Reloading;
+			//FTimerDelegate Callback;
+			//Callback.BindLambda([this] {this->Reloaded = true; });
+			//GetWorldTimerManager().SetTimer(TimerHandle, Callback, ReloadTime, false);
 			FTimerHandle TimerHandle;
-			GetWorldTimerManager().SetTimer(TimerHandle, Callback, ReloadTime, false);
+			GetWorldTimerManager().SetTimer(TimerHandle, this, &ATank::Reload, ReloadTime);
 		}
 		else
 			UE_LOG(LogTankGame, Error, TEXT("Tried to fire but got NULL back!"))
 	}
 }
 
+void ATank::Reload()
+{
+	Reloaded = true;
+	FiringStatus = (AimingComponent->GetLockedOn() ? ETankFiringStatus::LockedOn : ETankFiringStatus::Aiming);
+}
+
 bool ATank::IsReloaded() const
 {
 	return Reloaded;
+}
+
+ETankFiringStatus ATank::GetFiringStatus() const
+{
+	if (!Reloaded) return ETankFiringStatus::Reloading;
+	return (AimingComponent->GetLockedOn() ? ETankFiringStatus::LockedOn : ETankFiringStatus::Aiming);
 }
 
 bool ATank::FindTrajectory(const FVector & IdealPosition)
