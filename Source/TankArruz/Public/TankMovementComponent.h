@@ -37,6 +37,7 @@ public:
 
 	/// AI
 	void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
+	//void RequestPathMove(const FVector & MoveVelocity) override;
 protected:
 	UStaticMeshComponent * Body = nullptr;
 	UStaticMeshComponent * LeftTrack = nullptr;

@@ -98,6 +98,12 @@ bool ATank::FindTrajectory(const FVector & IdealPosition)
 		AimingComponent->SetAimPitch(NewRotation.Pitch);
 		AimingComponent->SetAimYaw(NewRotation.Yaw);
 	}
+	else
+	{
+		FRotator NewRotation = (IdealPosition - StartPosition).Rotation();
+		AimingComponent->SetAimPitch(NewRotation.Pitch);
+		AimingComponent->SetAimYaw(NewRotation.Yaw);
+	}
 	return ArcFound;
 }
 
