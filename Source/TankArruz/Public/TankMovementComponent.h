@@ -10,29 +10,24 @@
  * 
  */
 
-UCLASS()
+UCLASS(ClassGroup = (Tank), meta = (BlueprintSpawnableComponent))
 class TANKARRUZ_API UTankMovementComponent : public UNavMovementComponent
 {
 	GENERATED_BODY()
 
 public:
-
 	/// Setup
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBody(UStaticMeshComponent * NewBody);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetLeftTrack(UStaticMeshComponent * NewLeftTrack);
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetRightTrack(UStaticMeshComponent * NewRightTrack);
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void Initialize(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack);
 
 	/// Movement
-	UFUNCTION(BlueprintCallable, Category = Movement)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void LeftTrackForward(const float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void RightTrackForward(const float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void MoveForward(const float Axis);
-	UFUNCTION(BlueprintCallable, Category = Movement)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void TurnRight(const float Axis);
 
 	/// AI
@@ -43,8 +38,8 @@ protected:
 	UStaticMeshComponent * LeftTrack = nullptr;
 	UStaticMeshComponent * RightTrack = nullptr;
 	
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float ForceMultiplier = 2000000.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float TurnForceMultiplier = 1.3f;
 };

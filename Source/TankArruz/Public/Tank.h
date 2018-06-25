@@ -58,10 +58,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	ETankFiringStatus GetFiringStatus() const;
 
-	/// Movment
-	UFUNCTION(BlueprintCallable, Category = MovementSetup)
-	void SetupMovement(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack);
-
 	/// Misc?
 	UFUNCTION(BlueprintCallable)
 	FVector GetLocation();
@@ -86,22 +82,5 @@ protected:
 	bool Reloaded = true;
 	UPROPERTY(BlueprintReadOnly, Category = Weapon)
 	ETankFiringStatus FiringStatus = ETankFiringStatus::LockedOn;
-
-	/// Movement stuff
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Movement)
-	UTankMovementComponent * MovementComponent = nullptr;
-	// Body mesh to use for movement
-	UStaticMeshComponent * Body = nullptr;
-	// Left Track to use for movement
-	UStaticMeshComponent * LeftTrack = nullptr;
-	// Right Track to use for movement
-	UStaticMeshComponent * RightTrack = nullptr;
-
-	// Force multiplier when moving forwards or backwards
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
-	float ForwardForce = 4000000.0f;
-	// Force multiplier when turning left or right
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Movement)
-	float TurnForce = 4000000.0f;
 
 };

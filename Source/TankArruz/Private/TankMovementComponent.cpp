@@ -5,18 +5,11 @@
 #include "TankArruz.h"
 #include "DrawDebugHelpers.h"
 
-void UTankMovementComponent::SetBody(UStaticMeshComponent * NewBody)
+
+void UTankMovementComponent::Initialize(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack)
 {
 	Body = NewBody;
-}
-
-void UTankMovementComponent::SetLeftTrack(UStaticMeshComponent * NewLeftTrack)
-{
 	LeftTrack = NewLeftTrack;
-}
-
-void UTankMovementComponent::SetRightTrack(UStaticMeshComponent * NewRightTrack)
-{
 	RightTrack = NewRightTrack;
 }
 
@@ -59,3 +52,4 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	auto Cross = FVector::CrossProduct(MoveUnit, ActorUnit);
 	TurnRight(Cross.Z); // TODO: rotate so cross z points directly up
 }
+
