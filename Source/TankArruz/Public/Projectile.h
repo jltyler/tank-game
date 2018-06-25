@@ -17,7 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
-	UFUNCTION(BlueprintCallable, Category = Movement)
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void SetVelocity(const FVector & Velocity);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Movement)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Movement")
 	UProjectileMovementComponent * Movement = nullptr;
 	
 };

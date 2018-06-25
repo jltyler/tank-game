@@ -21,7 +21,7 @@ protected:
 	void Tick(float DeltaSeconds) override;
 
 	ATank * FindPlayerTank() const;
-	UPROPERTY(BlueprintReadOnly, Category = Pawn)
+	UPROPERTY(BlueprintReadOnly, Category = "Pawn")
 	ATank * ControlledTank = nullptr;
 	
 	void FindAimPointV();
