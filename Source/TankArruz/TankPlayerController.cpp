@@ -62,6 +62,6 @@ bool ATankPlayerController::AimTrace(const FVector & StartLocation, const FVecto
 	bool Hit = GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_WorldStatic, CQuery);
 	if (Hit) EndLocation = HitResult.Location;
 	DrawDebugSphere(GetWorld(), EndLocation, 100.0f, 8, Hit ? FColor::Emerald : FColor::Red, true, 1.5f, 0, 5.0f);
-	ControlledTank->FindTrajectory(EndLocation);
+	ControlledTank->AimAt(EndLocation);
 	return Hit;
 }

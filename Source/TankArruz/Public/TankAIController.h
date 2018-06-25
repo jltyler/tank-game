@@ -27,10 +27,11 @@ public:
 	void AimAtPlayer();
 
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = Tanks)
+	UPROPERTY(BlueprintReadOnly, Category = "Tanks")
 	ATank * ControlledTank = nullptr;
-	UPROPERTY(BlueprintReadOnly, Category = Tanks)
+	UPROPERTY(BlueprintReadOnly, Category = "Tanks")
 	ATank * PlayerTank = nullptr;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Pathfinding)
-	float PursueDistance = 10000.0f;
+	// ControlledTank will pursue until at least this distance
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Pathfinding")
+	float PursueDistance = 7500.0f;
 };

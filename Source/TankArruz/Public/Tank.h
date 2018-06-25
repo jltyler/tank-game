@@ -6,18 +6,6 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
-class UAimingComponent;
-class AProjectile;
-class UTankMovementComponent;
-
-UENUM()
-enum class ETankFiringStatus : uint8
-{
-	Reloading,
-	Aiming,
-	LockedOn
-};
-
 UCLASS()
 class TANKARRUZ_API ATank : public APawn
 {
@@ -35,52 +23,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Called by TankControllers with a FVector location to aim at
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Aiming")
+	void AimAt(const FVector & AimLocation);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Weapon")
+	void Fire();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	/// Weapon & Aiming
-	UFUNCTION(BlueprintCallable, Category = AimingSetup)
-	void SetupAiming(UStaticMeshComponent * NewBarrelComponent, UStaticMeshComponent * NewTurretComponent, USceneComponent * NewFirePoint);
-	// Set point at which the Tank will attempt to fire at
-	bool FindTrajectory(const FVector & IdealPosition);
-
-	UFUNCTION(BlueprintCallable, Category = TurretSetup)
-	void SetFirePoint(USceneComponent * NewFirePoint);
-	UFUNCTION(BlueprintCallable, Category = TurretInfo)
-	USceneComponent * GetFirePoint() const;
-
-	// Fire weapon (if reloaded)
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void Fire();
-	void Reload();
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	bool IsReloaded() const;
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	ETankFiringStatus GetFiringStatus() const;
-
-	/// Misc?
-	UFUNCTION(BlueprintCallable)
-	FVector GetLocation();
-
-
-protected:
-	/// Weapon stuff
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Turret)
-	UAimingComponent * AimingComponent = nullptr;
-	// Projectile launch speed for trajectory calculation
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
-	float LaunchSpeed = 3500.f;
-	// Time in seconds before Tank can fire again
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
-	float ReloadTime = 1.4f;
-	// AProjectile child class to fire
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Weapon)
-	TSubclassOf<AProjectile> WeaponProjectile;
-	// Where the projectile spawns when fired
-	USceneComponent * FirePoint = nullptr;
-	UPROPERTY(BlueprintReadOnly, Category = Weapon)
-	bool Reloaded = true;
-	UPROPERTY(BlueprintReadOnly, Category = Weapon)
-	ETankFiringStatus FiringStatus = ETankFiringStatus::LockedOn;
 
 };
