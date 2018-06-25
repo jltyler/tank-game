@@ -24,11 +24,6 @@ UAimingComponent::UAimingComponent()
 void UAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (!BarrelComponent)
-	UE_LOG(LogTankGame, Error, TEXT("%s aiming component has NULL BarrelComponent"), *GetOwner()->GetName())
-	if (!TurretComponent)
-	UE_LOG(LogTankGame, Error, TEXT("%s aiming component has NULL TurretComponent"), *GetOwner()->GetName())
 }
 
 void UAimingComponent::Initialize(UStaticMeshComponent * NewBarrelComponent, UStaticMeshComponent * NewTurretComponent, USceneComponent * NewFirePoint)

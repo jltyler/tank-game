@@ -38,26 +38,13 @@ bool ATankAIController::SetupTank()
 		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *ControlledTank->GetName())
 		return true;
 	}
-	else
-	{
-		UE_LOG(LogTankGame, Error, TEXT("%s controls NULL tank"), *GetName())
-		return false;
-	}
+	else return false;
 }
 
 bool ATankAIController::SetupPlayerTank()
 {
 	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (PlayerTank)
-	{
-		UE_LOG(LogTankGame, Log, TEXT("%s found player tank %s"), *GetName(), *PlayerTank->GetName())
-		return true;
-	}
-	else
-	{
-		UE_LOG(LogTankGame, Error, TEXT("%s could not find player tank!"), *GetName())
-		return false;
-	}
+	return (PlayerTank ? true : false);
 }
 
 void ATankAIController::AimAtPlayer()
