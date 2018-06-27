@@ -16,6 +16,9 @@ class TANKARRUZ_API UTankMovementComponent : public UNavMovementComponent
 	GENERATED_BODY()
 
 public:
+
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 	/// Setup
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UStaticMeshComponent * NewBody, UStaticMeshComponent * NewLeftTrack, UStaticMeshComponent * NewRightTrack);
@@ -42,4 +45,7 @@ protected:
 	float ForceMultiplier = 2000000.0f;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float TurnForceMultiplier = 1.3f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
+	float SidewaysFrictionMultiplier = 10.0f;
+
 };
