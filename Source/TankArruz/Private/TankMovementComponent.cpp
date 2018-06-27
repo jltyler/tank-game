@@ -9,10 +9,6 @@ void UTankMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Tick
 {
 	auto Vel = Body->GetPhysicsLinearVelocity().GetSafeNormal();
 	float Slippage = FVector::DotProduct(Vel, GetOwner()->GetActorRightVector());
-	auto CurrLoc = GetOwner()->GetActorLocation();
-	DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + Vel * 100, FColor::Emerald, false, -1.0f, 0, 10.0f);
-	DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + GetOwner()->GetActorRightVector() * 1000.0f, FColor::Blue, false, -1.0f, 0, 10.0f);
-	UE_LOG(LogTankGame, Warning, TEXT("%s.Slippage: %f"), *GetOwner()->GetName(), Slippage)
 	Body->AddForce(-Vel * FMath::Abs<float>(Slippage) * SidewaysFrictionMultiplier);
 }
 

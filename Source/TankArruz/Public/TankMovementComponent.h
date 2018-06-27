@@ -46,6 +46,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float TurnForceMultiplier = 1.3f;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
-	float SidewaysFrictionMultiplier = 10.0f;
+	float SidewaysFrictionMultiplier = 2000000.0f;
 
 };
