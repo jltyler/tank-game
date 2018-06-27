@@ -38,8 +38,8 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (BarrelComponent) UpdateBarrelRotation(DeltaTime);
-	if (TurretComponent) UpdateTurretRotation(DeltaTime);
+	if (ensure(BarrelComponent)) UpdateBarrelRotation(DeltaTime);
+	if (ensure(TurretComponent)) UpdateTurretRotation(DeltaTime);
 	RefreshFiringStatus();
 }
 
@@ -109,28 +109,37 @@ bool UAimingComponent::AimAtLocation(const FVector & AimLocation)
 	return ArcFound;
 }
 
-void UAimingComponent::Fire()
+void UAimingComponent::FireProjectile()
 {
-	if (Reloaded)
+	FVector SpawnLocation(FirePoint ? FirePoint->GetComponentLocation() : GetOwner()->GetActorLocation());
+	FRotator SpawnRotation(FirePoint ? FirePoint->GetComponentRotation() : GetOwner()->GetActorRotation());
+	AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, FRotator(0.0f), FActorSpawnParameters());
+	if (Fired)
 	{
-		FVector SpawnLocation(FirePoint ? FirePoint->GetComponentLocation() : GetOwner()->GetActorLocation());
-		FRotator SpawnRotation(FirePoint ? FirePoint->GetComponentRotation() : GetOwner()->GetActorRotation());
-		AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, FRotator(0.0f), FActorSpawnParameters());
-		if (Fired)
-		{
-			Fired->SetVelocity(GetAimVector() * LaunchSpeed);
-			Reloaded = false;
-			FTimerHandle TimerHandle;
-			GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, this, &UAimingComponent::Reload, ReloadTime);
-		}
-		else
-			UE_LOG(LogTankGame, Error, TEXT("%s.%s failed to spawn projectile!"), *GetOwner()->GetName(), *GetName())
+		Fired->SetVelocity(GetAimVector() * LaunchSpeed);
+		Reloaded = false;
+		FTimerHandle TimerHandle;
+		GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, this, &UAimingComponent::Reload, ReloadTime);
 	}
+	else
+		UE_LOG(LogTankGame, Error, TEXT("%s.%s failed to spawn projectile!"), *GetOwner()->GetName(), *GetName())
+}
+
+void UAimingComponent::StartFiring()
+{
+	IsFiring = true;
+	if (Reloaded) FireProjectile();
+}
+
+void UAimingComponent::StopFiring()
+{
+	IsFiring = false;
 }
 
 void UAimingComponent::Reload()
 {
 	Reloaded = true;
+	if (Refire && IsFiring) FireProjectile();
 }
 
 inline void UAimingComponent::SetDesiredYaw(float NewYaw)

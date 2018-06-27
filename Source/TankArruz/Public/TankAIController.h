@@ -20,7 +20,7 @@ public:
 	void Tick(float DeltaTime) override;
 
 protected:
-	bool SetupTank();
+	bool SetupAITank();
 	bool SetupPlayerTank();
 
 public:

@@ -15,17 +15,17 @@ void UTankMovementComponent::Initialize(UStaticMeshComponent * NewBody, UStaticM
 
 void UTankMovementComponent::LeftTrackForward(const float Axis)
 {
-	if (Body && LeftTrack) Body->AddForceAtLocation(Body->GetComponentRotation().Vector() * ForceMultiplier * Axis, LeftTrack->GetComponentLocation());
+	if (ensure(Body && LeftTrack)) Body->AddForceAtLocation(Body->GetComponentRotation().Vector() * ForceMultiplier * Axis, LeftTrack->GetComponentLocation());
 }
 
 void UTankMovementComponent::RightTrackForward(const float Axis)
 {
-	if (Body && RightTrack) Body->AddForceAtLocation(Body->GetComponentRotation().Vector() * ForceMultiplier * Axis, RightTrack->GetComponentLocation());
+	if (ensure(Body && RightTrack)) Body->AddForceAtLocation(Body->GetComponentRotation().Vector() * ForceMultiplier * Axis, RightTrack->GetComponentLocation());
 }
 
 void UTankMovementComponent::MoveForward(const float Axis)
 {
-	if (Body && LeftTrack && RightTrack)
+	if (ensure(Body && LeftTrack && RightTrack))
 	{
 		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
@@ -35,7 +35,7 @@ void UTankMovementComponent::MoveForward(const float Axis)
 
 void UTankMovementComponent::TurnRight(const float Axis)
 {
-	if (Body && LeftTrack && RightTrack)
+	if (ensure(Body && LeftTrack && RightTrack))
 	{
 		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier * TurnForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
@@ -50,6 +50,8 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	auto Dot = FVector::DotProduct(MoveUnit, ActorUnit);
 	MoveForward(Dot);
 	auto Cross = FVector::CrossProduct(MoveUnit, ActorUnit);
-	TurnRight(Cross.Z); // TODO: rotate so cross z points directly up
+	
+	TurnRight(Cross.Size() * FMath::Sign(Cross.Z)); // TODO: rotate so cross z points directly up
+	//DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + Cross *  1000, FColor::White, true, .3f, 0, 15.f);
 }
 

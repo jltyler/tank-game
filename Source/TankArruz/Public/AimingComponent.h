@@ -45,10 +45,16 @@ public:
 	// Set desired yaw and pitch for arc to hit AimLocation
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	bool AimAtLocation(const FVector & AimLocation);
-	// Fire weapon (if reloaded)
+	// Fire projectile from FirePoint at Barrel.Rotation.Vector * LaunchSpeed
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void Fire();
-	// Reload weapon
+	void FireProjectile();
+	// Start firing weapon, will fire immediately when reloaded
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void StartFiring();
+	// Stop firing if weapon is automagic
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void StopFiring();
+	// Reload and refire if weapon is set to
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void Reload();
 
@@ -126,4 +132,9 @@ protected:
 	bool Reloaded = true;
 	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 	ETankFiringStatus FiringStatus = ETankFiringStatus::LockedOn;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Weapon")
+	bool IsFiring = false;
+	// Automatic refiring when fire button is held
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon")
+	bool Refire = false;
 };

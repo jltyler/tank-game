@@ -28,7 +28,10 @@ public:
 	void AimAt(const FVector & AimLocation);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Weapon")
-	void Fire();
+	void StartFiring();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Weapon")
+	void StopFiring();
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
