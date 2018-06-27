@@ -33,6 +33,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void TurnRight(const float Axis);
 
+	/// Physics
+	UFUNCTION()
+	void OnLeftTrackHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
+	UFUNCTION()
+	void OnRightTrackHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
+
 	/// AI
 	void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
 	//void RequestPathMove(const FVector & MoveVelocity) override;
@@ -40,6 +46,9 @@ protected:
 	UStaticMeshComponent * Body = nullptr;
 	UStaticMeshComponent * LeftTrack = nullptr;
 	UStaticMeshComponent * RightTrack = nullptr;
+
+	float ForwardDrive = 0.0f;
+	float TurnRightDrive = 0.0f;
 	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float ForceMultiplier = 2000000.0f;

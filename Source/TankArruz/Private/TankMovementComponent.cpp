@@ -16,7 +16,10 @@ void UTankMovementComponent::Initialize(UStaticMeshComponent * NewBody, UStaticM
 {
 	Body = NewBody;
 	LeftTrack = NewLeftTrack;
+	LeftTrack->OnComponentHit.AddDynamic(this, &UTankMovementComponent::OnLeftTrackHit);
 	RightTrack = NewRightTrack;
+	RightTrack->OnComponentHit.AddDynamic(this, &UTankMovementComponent::OnRightTrackHit);
+
 }
 
 void UTankMovementComponent::LeftTrackForward(const float Axis)
@@ -31,21 +34,33 @@ void UTankMovementComponent::RightTrackForward(const float Axis)
 
 void UTankMovementComponent::MoveForward(const float Axis)
 {
-	if (ensure(Body && LeftTrack && RightTrack))
-	{
-		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier;
-		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
-		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
-	}
+	ForwardDrive = Axis;
 }
 
 void UTankMovementComponent::TurnRight(const float Axis)
 {
-	if (ensure(Body && LeftTrack && RightTrack))
+	TurnRightDrive = Axis;
+}
+
+void UTankMovementComponent::OnLeftTrackHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if (ensure(Body && LeftTrack))
 	{
-		FVector ForceVector = Body->GetComponentRotation().Vector() * Axis * ForceMultiplier * TurnForceMultiplier;
+		FVector ForceVector = Body->GetForwardVector() * (ForwardDrive + TurnRightDrive) * ForceMultiplier;
+		auto CurrLoc = LeftTrack->GetComponentLocation();
+		DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + ForceVector, FColor::Purple, false, -1.f, 0, 10.f);
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
-		Body->AddForceAtLocation(-ForceVector, RightTrack->GetComponentLocation());
+	}
+}
+
+void UTankMovementComponent::OnRightTrackHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if (ensure(Body && RightTrack))
+	{
+		FVector ForceVector = Body->GetForwardVector() * (ForwardDrive - TurnRightDrive) * ForceMultiplier;
+		auto CurrLoc = RightTrack->GetComponentLocation();
+		DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + ForceVector * 10, FColor::Purple, false, -1.f, 0, 10.f); 
+		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
 	}
 }
 
