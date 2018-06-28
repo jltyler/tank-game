@@ -19,7 +19,6 @@ UAimingComponent::UAimingComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void UAimingComponent::BeginPlay()
 {
@@ -40,18 +39,6 @@ void UAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	if (ensure(BarrelComponent)) UpdateBarrelRotation(DeltaTime);
 	if (ensure(TurretComponent)) UpdateTurretRotation(DeltaTime);
-	RefreshFiringStatus();
-}
-
-void UAimingComponent::RefreshFiringStatus()
-{
-	if (Reloaded)
-	{
-		if (YawLockedOn && PitchLockedOn) FiringStatus = ETankFiringStatus::LockedOn;
-		else FiringStatus = ETankFiringStatus::Aiming;
-
-	}
-	else FiringStatus = ETankFiringStatus::Reloading;
 }
 
 void UAimingComponent::UpdateBarrelRotation(float DeltaTime)
@@ -101,7 +88,7 @@ bool UAimingComponent::AimAtLocation(const FVector & AimLocation)
 	FVector FinalVelocity;
 	bool ArcFound = UGameplayStatics::SuggestProjectileVelocity(
 		this, FinalVelocity, StartPosition, AimLocation, LaunchSpeed,
-		false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
+		PreferHighArc, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace);
 	
 	// If no trajectory path found, aim directly at AimLocation
 	FRotator NewRotation = (ArcFound ? FinalVelocity.Rotation() : (AimLocation - StartPosition).Rotation());
@@ -113,6 +100,7 @@ bool UAimingComponent::AimAtLocation(const FVector & AimLocation)
 
 void UAimingComponent::FireProjectile()
 {
+	if (!Reloaded || Ammo == 0) return;
 	FVector SpawnLocation(FirePoint ? FirePoint->GetComponentLocation() : GetOwner()->GetActorLocation());
 	FRotator SpawnRotation(FirePoint ? FirePoint->GetComponentRotation() : GetOwner()->GetActorRotation());
 	AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, FRotator(0.0f), FActorSpawnParameters());
@@ -122,6 +110,7 @@ void UAimingComponent::FireProjectile()
 		Reloaded = false;
 		FTimerHandle TimerHandle;
 		GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, this, &UAimingComponent::Reload, ReloadTime);
+		--Ammo;
 	}
 	else
 		UE_LOG(LogTankGame, Error, TEXT("%s.%s failed to spawn projectile!"), *GetOwner()->GetName(), *GetName())
@@ -130,7 +119,7 @@ void UAimingComponent::FireProjectile()
 void UAimingComponent::StartFiring()
 {
 	IsFiring = true;
-	if (Reloaded) FireProjectile();
+	FireProjectile();
 }
 
 void UAimingComponent::StopFiring()
@@ -142,6 +131,19 @@ void UAimingComponent::Reload()
 {
 	Reloaded = true;
 	if (Refire && IsFiring) FireProjectile();
+}
+
+inline int UAimingComponent::GetAmmo() const
+{
+	return Ammo;
+}
+
+ETankFiringStatus UAimingComponent::GetFiringStatus() const
+{
+	if (!Reloaded) return ETankFiringStatus::Reloading;
+	else if (Ammo == 0) return ETankFiringStatus::NoAmmo;
+	else if (YawLockedOn && PitchLockedOn) return ETankFiringStatus::LockedOn;
+	else return ETankFiringStatus::Aiming;
 }
 
 inline void UAimingComponent::SetDesiredYaw(float NewYaw)

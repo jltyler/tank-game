@@ -13,7 +13,8 @@ enum class ETankFiringStatus : uint8
 {
 	Reloading,
 	Aiming,
-	LockedOn
+	LockedOn,
+	NoAmmo
 };
 
 UCLASS( ClassGroup=(Tank), meta=(BlueprintSpawnableComponent) )
@@ -33,10 +34,8 @@ protected:
 	void Initialize(UStaticMeshComponent * NewBarrelComponent, UStaticMeshComponent * NewTurretComponent, USceneComponent * NewFirePoint);
 
 public:	
-	// Called every frame
+// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	void RefreshFiringStatus();
 
 	void UpdateBarrelRotation(float DeltaTime);
 	void UpdateTurretRotation(float DeltaTime);
@@ -57,6 +56,10 @@ public:
 	// Reload and refire if weapon is set to
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void Reload();
+	UFUNCTION(BlueprintPure, Category = "Weapon")
+	int GetAmmo() const;
+	UFUNCTION(BlueprintPure, Category = "Weapon")
+	ETankFiringStatus GetFiringStatus() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	void SetDesiredYaw(float NewYaw);
@@ -115,6 +118,8 @@ protected:
 	bool YawLockedOn = false;
 	// Pitch is at desired value
 	bool PitchLockedOn = false;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Aiming")
+	bool PreferHighArc = false;
 
 	/// Weapon stuff
 	// Projectile launch speed
@@ -135,6 +140,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Weapon")
 	bool IsFiring = false;
 	// Automatic refiring when fire button is held
+	public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon")
 	bool Refire = false;
+	protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon")
+	int Ammo = 100;
+
 };
