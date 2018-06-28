@@ -65,14 +65,12 @@ void UAimingComponent::UpdateBarrelRotation(float DeltaTime)
 	{ 
 		float NewPitch = FMath::Clamp<float>(BarrelComponent->RelativeRotation.Pitch + Diff, MinPitch, MaxPitch);
 		BarrelComponent->SetRelativeRotation(FRotator(NewPitch, 0.f, 0.f));
-		BarrelComponent->AddLocalRotation(FRotator(Diff, 0.0f, 0.0f));
 		PitchLockedOn = true;
 	}
 	else
 	{
 		float NewPitch = FMath::Clamp<float>(BarrelComponent->RelativeRotation.Pitch + FMath::Sign(Diff) * TurnSpeed, MinPitch, MaxPitch);
 		BarrelComponent->SetRelativeRotation(FRotator(NewPitch, 0.f, 0.f));
-		//BarrelComponent->AddLocalRotation(FRotator(FMath::Sign(Diff) * TurnSpeed, 0.0f, 0.0f));
 		PitchLockedOn = false;
 	}
 }
