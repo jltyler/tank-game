@@ -46,9 +46,7 @@ void UTankMovementComponent::OnLeftTrackHit(UPrimitiveComponent * HitComponent, 
 {
 	if (ensure(Body && LeftTrack))
 	{
-		FVector ForceVector = Body->GetForwardVector() * (ForwardDrive + TurnRightDrive) * ForceMultiplier;
-		auto CurrLoc = LeftTrack->GetComponentLocation();
-		DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + ForceVector, FColor::Purple, false, -1.f, 0, 10.f);
+		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(ForwardDrive + TurnRightDrive, -1.f, 1.f) * ForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
 	}
 }
@@ -57,9 +55,7 @@ void UTankMovementComponent::OnRightTrackHit(UPrimitiveComponent * HitComponent,
 {
 	if (ensure(Body && RightTrack))
 	{
-		FVector ForceVector = Body->GetForwardVector() * (ForwardDrive - TurnRightDrive) * ForceMultiplier;
-		auto CurrLoc = RightTrack->GetComponentLocation();
-		DrawDebugLine(GetWorld(), CurrLoc, CurrLoc + ForceVector * 10, FColor::Purple, false, -1.f, 0, 10.f); 
+		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(ForwardDrive - TurnRightDrive, -1.f, 1.f) * ForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
 	}
 }
@@ -72,7 +68,8 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	MoveForward(Dot);
 	auto Cross = FVector::CrossProduct(MoveUnit, ActorUnit);
 	
-	TurnRight(Cross.Size() * FMath::Sign(Cross.Z));
+	TurnRight(FVector::DotProduct(MoveUnit, GetOwner()->GetActorRightVector()));
+	//TurnRight(Cross.Size() * FMath::Sign(Cross.Z));
 	//DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + Cross *  1000, FColor::White, true, .3f, 0, 15.f);
 }
 
