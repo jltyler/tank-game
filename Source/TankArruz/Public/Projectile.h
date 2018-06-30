@@ -21,6 +21,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void Launch(const float & LaunchSpeed);
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
+	void Death();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -37,4 +40,6 @@ protected:
 	UStaticMeshComponent * VisibleMesh = nullptr;
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent * LaunchBlast = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent * ImpactBlast = nullptr;
 };

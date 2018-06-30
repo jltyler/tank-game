@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Public/TimerManager.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -23,6 +24,10 @@ AProjectile::AProjectile()
 
 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
 	LaunchBlast->SetupAttachment(RootComponent);
+
+	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	ImpactBlast->SetupAttachment(RootComponent);
+	ImpactBlast->bAutoActivate = false;
 }
 
 void AProjectile::Launch(const float & LaunchSpeed)
@@ -31,11 +36,26 @@ void AProjectile::Launch(const float & LaunchSpeed)
 	ProjectileMovement->Activate();
 }
 
+void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+{
+	ImpactBlast->Activate();
+	LaunchBlast->Deactivate();
+	VisibleMesh->SetVisibility(false);
+	FTimerHandle DeathTimer;
+	GetWorldTimerManager().SetTimer(DeathTimer, this, &AProjectile::Death, 2.5f, false);
+}
+
+void AProjectile::Death()
+{
+	Destroy();
+}
+
+
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 // Called every frame
