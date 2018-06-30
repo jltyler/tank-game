@@ -102,11 +102,11 @@ void UAimingComponent::FireProjectile()
 {
 	if (!Reloaded || Ammo == 0) return;
 	FVector SpawnLocation(FirePoint ? FirePoint->GetComponentLocation() : GetOwner()->GetActorLocation());
-	FRotator SpawnRotation(FirePoint ? FirePoint->GetComponentRotation() : GetOwner()->GetActorRotation());
-	AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, FRotator(0.0f), FActorSpawnParameters());
+	FRotator SpawnRotation(BarrelComponent ? BarrelComponent->GetComponentRotation() : GetOwner()->GetActorRotation());
+	AProjectile * Fired = GetWorld()->SpawnActor<AProjectile>(WeaponProjectile, SpawnLocation, SpawnRotation, FActorSpawnParameters());
 	if (Fired)
 	{
-		Fired->SetVelocity(GetAimVector() * LaunchSpeed);
+		Fired->Launch(LaunchSpeed);
 		Reloaded = false;
 		FTimerHandle TimerHandle;
 		GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, this, &UAimingComponent::Reload, ReloadTime);

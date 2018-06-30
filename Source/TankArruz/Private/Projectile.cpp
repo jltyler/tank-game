@@ -10,12 +10,13 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	Movement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement"));
 	Movement->bAutoActivate = false;
-	Movement->bRotationFollowsVelocity = true;
+	//Movement->bRotationFollowsVelocity = true;
 }
 
-void AProjectile::SetVelocity(const FVector & NewVelocity)
+void AProjectile::Launch(const float & LaunchSpeed)
 {
-	Movement->SetVelocityInLocalSpace(NewVelocity);
+	Movement->SetVelocityInLocalSpace(FVector(LaunchSpeed, 0.f, 0.f));
+	Movement->Activate();
 }
 
 // Called when the game starts or when spawned

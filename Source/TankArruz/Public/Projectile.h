@@ -18,7 +18,7 @@ public:
 	AProjectile();
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-	void SetVelocity(const FVector & Velocity);
+	void Launch(const float & LaunchSpeed);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
