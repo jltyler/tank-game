@@ -7,6 +7,7 @@
 #include "Projectile.generated.h"
 
 class UProjectileMovementComponent;
+class USphereComponent;
 
 UCLASS()
 class TANKARRUZ_API AProjectile : public AActor
@@ -27,7 +28,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Movement")
-	UProjectileMovementComponent * Movement = nullptr;
-	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UProjectileMovementComponent * ProjectileMovement = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	USphereComponent * CollisionMesh = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent * VisibleMesh = nullptr;
 };
