@@ -7,6 +7,7 @@
 #include "Projectile.generated.h"
 
 class UProjectileMovementComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class TANKARRUZ_API AProjectile : public AActor
@@ -18,6 +19,8 @@ public:
 	AProjectile();
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
+	void Launch(const float & Speed);
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void SetVelocity(const FVector & Velocity);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,7 +30,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Movement")
-	UProjectileMovementComponent * Movement = nullptr;
-	
+	 UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UProjectileMovementComponent * ProjectileMovement = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent * CollisionMesh = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent * LaunchBlast = nullptr;
 };
