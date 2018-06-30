@@ -8,6 +8,7 @@
 
 class UProjectileMovementComponent;
 class USphereComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class TANKARRUZ_API AProjectile : public AActor
@@ -34,4 +35,6 @@ protected:
 	USphereComponent * CollisionMesh = nullptr;
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent * VisibleMesh = nullptr;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
+	UParticleSystemComponent * LaunchBlast = nullptr;
 };
