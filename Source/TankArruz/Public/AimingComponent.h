@@ -57,7 +57,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void Reload();
 	UFUNCTION(BlueprintPure, Category = "Weapon")
-	int GetAmmo() const;
+	int32 GetAmmo() const;
 	UFUNCTION(BlueprintPure, Category = "Weapon")
 	ETankFiringStatus GetFiringStatus() const;
 
@@ -145,6 +145,6 @@ protected:
 	bool Refire = false;
 	protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Weapon")
-	int Ammo = 100;
+	int32 Ammo = 100;
 
 };

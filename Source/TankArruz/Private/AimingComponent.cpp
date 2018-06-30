@@ -133,7 +133,7 @@ void UAimingComponent::Reload()
 	if (Refire && IsFiring) FireProjectile();
 }
 
-inline int UAimingComponent::GetAmmo() const
+inline int32 UAimingComponent::GetAmmo() const
 {
 	return Ammo;
 }
