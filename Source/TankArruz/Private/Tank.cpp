@@ -30,6 +30,11 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 	return DamageAmount;
 }
 
+float ATank::GetHealthAlpha() const
+{
+	return HitPoints / MaxHitPoints;
+}
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

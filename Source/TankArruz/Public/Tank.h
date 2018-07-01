@@ -35,9 +35,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Weapon")
 	void StopFiring();
 
+	UFUNCTION(BlueprintPure, Category = "Tank")
+	float GetHealthAlpha() const;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Tank")
-	float HitPoints = 1000.f;
+	float MaxHitPoints = 200.f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Tank")
+	float HitPoints = MaxHitPoints;
 };
