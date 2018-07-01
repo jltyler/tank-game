@@ -47,8 +47,8 @@ protected:
 	UStaticMeshComponent * LeftTrack = nullptr;
 	UStaticMeshComponent * RightTrack = nullptr;
 
-	float ForwardDrive = 0.0f;
-	float TurnRightDrive = 0.0f;
+	float LeftDrive = 0.0f;
+	float RightDrive = 0.0f;
 	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Movement")
 	float ForceMultiplier = 2000000.0f;

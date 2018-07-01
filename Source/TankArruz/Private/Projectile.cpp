@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Public/TimerManager.h"
+#include "Engine/World.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -40,9 +41,10 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	ImpactBlast->Activate();
 	LaunchBlast->Deactivate();
+	SetActorEnableCollision(false);
 	VisibleMesh->SetVisibility(false);
 	FTimerHandle DeathTimer;
-	GetWorldTimerManager().SetTimer(DeathTimer, this, &AProjectile::Death, 2.5f, false);
+	GetWorldTimerManager().SetTimer(DeathTimer, this, &AProjectile::Death, 10.0f, false);
 }
 
 void AProjectile::Death()

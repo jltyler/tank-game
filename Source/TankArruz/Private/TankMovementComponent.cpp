@@ -34,20 +34,23 @@ void UTankMovementComponent::RightTrackForward(const float Axis)
 
 void UTankMovementComponent::MoveForward(const float Axis)
 {
-	ForwardDrive = Axis;
+	LeftDrive += Axis;
+	RightDrive += Axis;
 }
 
 void UTankMovementComponent::TurnRight(const float Axis)
 {
-	TurnRightDrive = Axis;
+	LeftDrive += Axis;
+	RightDrive -= Axis;
 }
 
 void UTankMovementComponent::OnLeftTrackHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
 	if (ensure(Body && LeftTrack))
 	{
-		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(ForwardDrive + TurnRightDrive, -1.f, 1.f) * ForceMultiplier;
+		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(LeftDrive, -1.f, 1.f) * ForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, LeftTrack->GetComponentLocation());
+		LeftDrive = 0.f;
 	}
 }
 
@@ -55,14 +58,18 @@ void UTankMovementComponent::OnRightTrackHit(UPrimitiveComponent * HitComponent,
 {
 	if (ensure(Body && RightTrack))
 	{
-		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(ForwardDrive - TurnRightDrive, -1.f, 1.f) * ForceMultiplier;
+		FVector ForceVector = Body->GetForwardVector() * FMath::Clamp<float>(RightDrive, -1.f, 1.f) * ForceMultiplier;
 		Body->AddForceAtLocation(ForceVector, RightTrack->GetComponentLocation());
+		RightDrive = 0.f;
 	}
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
 {
+	//UE_LOG(LogTankGame, Log, TEXT("%s.RequestDirectMove(%s)"), *GetOwner()->GetName(), *MoveVelocity.ToString())
 	auto MoveUnit = MoveVelocity.GetSafeNormal();
+	auto AboveActor = GetOwner()->GetActorLocation() + FVector(0.f, 0.f, 200.f);
+	DrawDebugLine(GetWorld(), AboveActor, AboveActor + MoveUnit *  1000, FColor::White, true, .3f, 0, 15.f);
 	auto ActorUnit = GetOwner()->GetActorForwardVector();
 	auto Dot = FVector::DotProduct(MoveUnit, ActorUnit);
 	MoveForward(Dot);
@@ -70,6 +77,5 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	
 	TurnRight(FVector::DotProduct(MoveUnit, GetOwner()->GetActorRightVector()));
 	//TurnRight(Cross.Size() * FMath::Sign(Cross.Z));
-	//DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + Cross *  1000, FColor::White, true, .3f, 0, 15.f);
 }
 
