@@ -7,6 +7,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Public/TimerManager.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -41,8 +42,12 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	ImpactBlast->Activate();
 	LaunchBlast->Deactivate();
+
 	SetActorEnableCollision(false);
 	VisibleMesh->SetVisibility(false);
+
+	UGameplayStatics::ApplyRadialDamage(this, 20, GetActorLocation(), 1000.f, UDamageType::StaticClass(), TArray<AActor *>());
+
 	FTimerHandle DeathTimer;
 	GetWorldTimerManager().SetTimer(DeathTimer, this, &AProjectile::Death, 10.0f, false);
 }

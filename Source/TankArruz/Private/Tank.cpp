@@ -24,6 +24,12 @@ void ATank::Tick(float DeltaTime)
 
 }
 
+float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	HitPoints -= DamageAmount;
+	return DamageAmount;
+}
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

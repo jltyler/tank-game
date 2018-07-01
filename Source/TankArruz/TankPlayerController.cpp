@@ -13,7 +13,6 @@
 
 void ATankPlayerController::BeginPlay()
 {
-	Super::BeginPlay();
 	ControlledTank = FindPlayerTank();
 	if (ControlledTank)
 		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *ControlledTank->GetName())
@@ -22,6 +21,7 @@ void ATankPlayerController::BeginPlay()
 
 	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankPlayerController::FindAimPointV, 0.2f, true);
+	Super::BeginPlay();
 
 }
 
