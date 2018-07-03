@@ -30,6 +30,24 @@ void ATankAIController::Tick(float DeltaTime)
 	}
 }
 
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		ATank * NewTank = Cast<ATank>(InPawn);
+		if (ensure(NewTank))
+		{
+			NewTank->OnTankDeath.AddDynamic(this, &ATankAIController::OnTankDeath);
+		}
+	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTankGame, Warning, TEXT("%s.ControlledTank has died!"), *GetName())
+}
+
 bool ATankAIController::SetupAITank()
 {
 	ControlledTank = Cast<ATank>(GetPawn());

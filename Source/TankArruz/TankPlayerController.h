@@ -18,9 +18,12 @@ class TANKARRUZ_API ATankPlayerController : public APlayerController
 	
 protected:
 	void BeginPlay() override;
+	void SetPawn(APawn * InPawn) override;
+	UFUNCTION()
+	void OnTankDeath();
 	void Tick(float DeltaSeconds) override;
 
-	ATank * FindPlayerTank() const;
+	ATank * GetTank() const;
 	UPROPERTY(BlueprintReadOnly, Category = "Pawn")
 	ATank * ControlledTank = nullptr;
 	

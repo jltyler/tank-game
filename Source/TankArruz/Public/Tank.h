@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDeath);
+
 UCLASS()
 class TANKARRUZ_API ATank : public APawn
 {
@@ -24,6 +26,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+
+	void Death();
+	FTankDeath OnTankDeath;
 
 	// Called by TankControllers with a FVector location to aim at
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Aiming")

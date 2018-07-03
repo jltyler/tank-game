@@ -13,7 +13,7 @@
 
 void ATankPlayerController::BeginPlay()
 {
-	ControlledTank = FindPlayerTank();
+	ControlledTank = GetTank();
 	if (ControlledTank)
 		UE_LOG(LogTankGame, Log, TEXT("%s controls tank %s"), *GetName(), *ControlledTank->GetName())
 	else
@@ -25,12 +25,29 @@ void ATankPlayerController::BeginPlay()
 
 }
 
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (!InPawn) return;
+	ATank * NewTank = Cast<ATank>(InPawn);
+	if (ensure(NewTank))
+	{
+		NewTank->OnTankDeath.AddDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	UE_LOG(LogTankGame, Warning, TEXT("%s.ControlledTank has died!"), *GetName())
+
+}
+
 void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 }
 
-ATank * ATankPlayerController::FindPlayerTank() const
+ATank * ATankPlayerController::GetTank() const
 {
 	return Cast<ATank>(GetPawn());
 }

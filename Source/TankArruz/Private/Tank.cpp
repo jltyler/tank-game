@@ -27,7 +27,17 @@ void ATank::Tick(float DeltaTime)
 float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	HitPoints -= DamageAmount;
+	if (HitPoints <= 0)
+	{
+		OnTankDeath.Broadcast();
+		Death();
+	}
 	return DamageAmount;
+}
+
+void ATank::Death()
+{
+	UE_LOG(LogTankGame, Warning, TEXT("%s has died!"), *GetName())
 }
 
 float ATank::GetHealthAlpha() const
