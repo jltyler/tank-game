@@ -38,7 +38,7 @@ void ATankPlayerController::SetPawn(APawn * InPawn)
 
 void ATankPlayerController::OnTankDeath()
 {
-	UE_LOG(LogTankGame, Warning, TEXT("%s.ControlledTank has died!"), *GetName())
+	StartSpectatingOnly();
 
 }
 

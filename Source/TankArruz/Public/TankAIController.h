@@ -21,6 +21,8 @@ public:
 	void SetPawn(APawn * InPawn) override;
 	UFUNCTION()
 	void OnTankDeath();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Tank")
+	void NewTankPossessed(ATank * NewTank);
 
 protected:
 	bool SetupAITank();
@@ -37,4 +39,5 @@ protected:
 	// ControlledTank will pursue until at least this distance
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Pathfinding")
 	float PursueDistance = 7500.0f;
+	FTimerHandle AimingTimerHandle;
 };

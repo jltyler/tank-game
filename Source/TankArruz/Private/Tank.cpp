@@ -15,6 +15,7 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	HitPoints = MaxHitPoints;
 }
 
 // Called every frame
@@ -37,6 +38,7 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 
 void ATank::Death()
 {
+	StopFiring();
 	UE_LOG(LogTankGame, Warning, TEXT("%s has died!"), *GetName())
 }
 

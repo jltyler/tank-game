@@ -50,5 +50,5 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Tank")
 	float MaxHitPoints = 200.f;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Tank")
-	float HitPoints = MaxHitPoints;
+	float HitPoints;
 };

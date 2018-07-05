@@ -12,10 +12,9 @@ void ATankAIController::BeginPlay()
 	SetActorTickEnabled(false);
 	SetupAITank();
 	SetupPlayerTank();
-	if (ensure(ControlledTank && PlayerTank))
+	if (PlayerTank)
 	{
-		FTimerHandle TimerHandle;
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ATankAIController::AimAtPlayer, 0.5f, true);
+		GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &ATankAIController::AimAtPlayer, 0.5f, true);
 		SetActorTickEnabled(true);
 	}
 	Super::BeginPlay();
@@ -23,6 +22,7 @@ void ATankAIController::BeginPlay()
 
 void ATankAIController::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	if (ensure(ControlledTank && PlayerTank))
 	{
 		auto result = MoveToActor(PlayerTank, PursueDistance, true, true, true);
@@ -35,17 +35,34 @@ void ATankAIController::SetPawn(APawn * InPawn)
 	Super::SetPawn(InPawn);
 	if (InPawn)
 	{
-		ATank * NewTank = Cast<ATank>(InPawn);
-		if (ensure(NewTank))
+		ControlledTank = Cast<ATank>(InPawn);
+		if (ControlledTank)
 		{
-			NewTank->OnTankDeath.AddDynamic(this, &ATankAIController::OnTankDeath);
+			if (PlayerTank)
+			{
+				GetWorldTimerManager().SetTimer(AimingTimerHandle, this, &ATankAIController::AimAtPlayer, 0.5f, true);
+				SetActorTickEnabled(true);
+			}
+			else
+			{
+				UE_LOG(LogTankGame, Error, TEXT("%s has no PlayerTank"), *GetName())
+			}
+			ControlledTank->OnTankDeath.AddDynamic(this, &ATankAIController::OnTankDeath);
+			NewTankPossessed(ControlledTank);
+		}
+		else
+		{
+			UE_LOG(LogTankGame, Error, TEXT("%s has no ControlledTank"), *GetName())
 		}
 	}
 }
 
 void ATankAIController::OnTankDeath()
 {
-	UE_LOG(LogTankGame, Warning, TEXT("%s.ControlledTank has died!"), *GetName())
+	GetWorldTimerManager().ClearTimer(AimingTimerHandle);
+	ControlledTank->DetachFromControllerPendingDestroy();
+	ControlledTank = nullptr;
+	SetActorTickEnabled(false);
 }
 
 bool ATankAIController::SetupAITank()
