@@ -31,15 +31,10 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 	if (HitPoints <= 0)
 	{
 		OnTankDeath.Broadcast();
+		StopFiring();
 		Death();
 	}
 	return DamageAmount;
-}
-
-void ATank::Death()
-{
-	StopFiring();
-	UE_LOG(LogTankGame, Warning, TEXT("%s has died!"), *GetName())
 }
 
 float ATank::GetHealthAlpha() const
